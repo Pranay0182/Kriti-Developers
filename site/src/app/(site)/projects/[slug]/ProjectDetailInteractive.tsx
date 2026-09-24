@@ -249,12 +249,24 @@ export function ProjectDetailInteractive({ project }: ProjectDetailInteractivePr
                 Enquire Now <ArrowRight className="w-4 h-4" />
               </button>
 
-              <button
-                onClick={() => alert("Downloading brochure...")}
-                className="bg-white/10 hover:bg-white text-white hover:text-slate-950 border border-white/40 font-semibold px-5 py-3.5 rounded-sm text-sm transition flex items-center gap-2 backdrop-blur-xs"
-              >
-                <Download className="w-4 h-4" /> Download Brochure
-              </button>
+              {project.brochureUrl && project.brochureUrl !== "#" ? (
+                <a
+                  href={project.brochureUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="bg-white/10 hover:bg-white text-white hover:text-slate-950 border border-white/40 font-semibold px-5 py-3.5 rounded-sm text-sm transition flex items-center gap-2 backdrop-blur-xs"
+                >
+                  <Download className="w-4 h-4" /> Download Brochure
+                </a>
+              ) : (
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-white/10 hover:bg-white text-white hover:text-slate-950 border border-white/40 font-semibold px-5 py-3.5 rounded-sm text-sm transition flex items-center gap-2 backdrop-blur-xs"
+                >
+                  <Download className="w-4 h-4" /> Request Brochure
+                </button>
+              )}
 
               {project.videoUrl && (
                 <a
@@ -473,7 +485,7 @@ export function ProjectDetailInteractive({ project }: ProjectDetailInteractivePr
                   {/* Map mockup */}
                   <div className="relative h-72 rounded-xl overflow-hidden border border-slate-200">
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117223.77977461939!2d85.25134731802955!3d23.343204812836267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f4e104aa5db7dd%3A0xdc09d49d6899f43e!2sRanchi%2C%20Jharkhand!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(project.location ? (project.location.toLowerCase().includes("ranchi") ? project.location : `${project.location}, Ranchi, Jharkhand`) : "Ranchi, Jharkhand")}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
@@ -588,12 +600,24 @@ export function ProjectDetailInteractive({ project }: ProjectDetailInteractivePr
                     Enquire Now <ArrowRight className="w-4 h-4" />
                   </button>
 
-                  <button
-                    onClick={() => alert("Downloading brochure...")}
-                    className="w-full bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold py-2.5 rounded-lg text-xs transition border border-slate-200 flex items-center justify-center gap-2"
-                  >
-                    <Download className="w-3.5 h-3.5" /> Download Brochure
-                  </button>
+                  {project.brochureUrl && project.brochureUrl !== "#" ? (
+                    <a
+                      href={project.brochureUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="w-full bg-slate-50 hover:bg-[#c69c6d] hover:text-slate-950 text-slate-700 font-semibold py-2.5 rounded-lg text-xs transition border border-slate-200 flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-3.5 h-3.5" /> Download Brochure
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => setIsModalOpen(true)}
+                      className="w-full bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold py-2.5 rounded-lg text-xs transition border border-slate-200 flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-3.5 h-3.5" /> Request Brochure
+                    </button>
+                  )}
                 </div>
               </div>
 

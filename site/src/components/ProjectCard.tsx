@@ -32,6 +32,7 @@ export function ProjectCard({
           src={imageUrl}
           alt={title}
           fill
+          loading="lazy"
           className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />

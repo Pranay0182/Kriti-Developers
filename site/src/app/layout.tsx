@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FloatingConcierge } from "@/components/FloatingConcierge";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -28,10 +29,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${playfair.variable} ${montserrat.variable} h-full antialiased font-sans`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <FloatingConcierge />
+        <SmoothScroll>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <FloatingConcierge />
+        </SmoothScroll>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ImageUploader } from "@/components/ImageUploader";
+import { BrochureUploader } from "@/components/BrochureUploader";
 import { Plus, Trash2, Save, ArrowLeft, Loader2, Check } from "lucide-react";
 import Link from "next/link";
 
@@ -358,17 +359,13 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
               helperText="High-resolution exterior render stored securely in Cloudflare R2 bucket 'images'."
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Brochure PDF Download Link</label>
-                <input
-                  type="text"
-                  value={formData.brochureUrl}
-                  onChange={(e) => setFormData({ ...formData, brochureUrl: e.target.value })}
-                  placeholder="https://pub-...r2.dev/brochure.pdf"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
-                />
-              </div>
+            <div className="pt-4 border-t border-slate-100 space-y-6">
+              <BrochureUploader
+                label="Official Project Brochure (PDF)"
+                value={formData.brochureUrl}
+                onChange={(url) => setFormData({ ...formData, brochureUrl: url })}
+                helperText="Upload the developer's official brochure PDF. Buyers can download this directly from the project page."
+              />
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Video Walkthrough URL</label>
@@ -377,7 +374,7 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
                   value={formData.videoUrl}
                   onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
                   placeholder="https://www.youtube.com/watch?v=..."
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50 max-w-lg"
                 />
               </div>
             </div>
