@@ -7,20 +7,21 @@ import Link from "next/link";
 export function FloatingVideoPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
-  const [isMuted, setIsMuted] = useState(true); // Must start muted in DOM for reliable mobile/desktop autoplay
+  const [isMuted, setIsMuted] = useState(false); // Audio is ON by default!
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Attempt playback helper
+  // Playback starter with audio by default
   const startPlayback = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // First attempt: try playing unmuted
+    // Unmute and set full volume by default
     video.muted = false;
-    const playPromise = video.play();
+    video.volume = 1.0;
 
+    const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
@@ -28,19 +29,30 @@ export function FloatingVideoPopup() {
           setIsPlaying(true);
         })
         .catch(() => {
-          // Browser policy blocked unmuted autoplay: immediately play muted so video moves automatically!
-          if (videoRef.current) {
-            videoRef.current.muted = true;
-            videoRef.current
-              .play()
-              .then(() => {
-                setIsMuted(true);
-                setIsPlaying(true);
-              })
-              .catch((err) => {
-                console.warn("Autoplay retry failed:", err);
-              });
-          }
+          // If browser policy temporarily blocks unmuted autoplay before document interaction,
+          // play and instantly unmute on the user's scroll / touch / click
+          video.muted = true;
+          video
+            .play()
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch(() => {});
+
+          const forceUnmute = () => {
+            if (videoRef.current) {
+              videoRef.current.muted = false;
+              videoRef.current.volume = 1.0;
+              setIsMuted(false);
+            }
+            ["scroll", "wheel", "touchstart", "touchmove", "pointerdown", "click"].forEach((evt) => {
+              window.removeEventListener(evt, forceUnmute);
+            });
+          };
+
+          ["scroll", "wheel", "touchstart", "touchmove", "pointerdown", "click"].forEach((evt) => {
+            window.addEventListener(evt, forceUnmute, { passive: true, once: true });
+          });
         });
     }
   }, []);
@@ -58,9 +70,16 @@ export function FloatingVideoPopup() {
     }
 
     const handleScroll = () => {
-      // Reveal popup when user scrolls down past 200px
-      if (window.scrollY > 200) {
+      // Reveal popup when user scrolls down past 180px
+      if (window.scrollY > 180) {
         setIsVisible(true);
+        // Explicitly unmute and ensure playback on scroll gesture
+        if (videoRef.current) {
+          videoRef.current.muted = false;
+          videoRef.current.volume = 1.0;
+          setIsMuted(false);
+          videoRef.current.play().catch(() => {});
+        }
       }
     };
 
@@ -73,27 +92,28 @@ export function FloatingVideoPopup() {
     };
   }, []);
 
-  // When visible, trigger immediate autoplay
+  // When visible, trigger playback with audio
   useEffect(() => {
     if (isVisible) {
       startPlayback();
 
-      // One-time interaction listener to unmute if initially muted by browser policy
-      const unmuteOnInteraction = () => {
+      // Ensure audio is on whenever user interacts
+      const onUserAction = () => {
         if (videoRef.current && videoRef.current.muted) {
           videoRef.current.muted = false;
+          videoRef.current.volume = 1.0;
           setIsMuted(false);
         }
-        window.removeEventListener("click", unmuteOnInteraction);
-        window.removeEventListener("touchstart", unmuteOnInteraction);
       };
 
-      window.addEventListener("click", unmuteOnInteraction, { once: true });
-      window.addEventListener("touchstart", unmuteOnInteraction, { once: true });
+      window.addEventListener("click", onUserAction, { passive: true });
+      window.addEventListener("touchstart", onUserAction, { passive: true });
+      window.addEventListener("wheel", onUserAction, { passive: true });
 
       return () => {
-        window.removeEventListener("click", unmuteOnInteraction);
-        window.removeEventListener("touchstart", unmuteOnInteraction);
+        window.removeEventListener("click", onUserAction);
+        window.removeEventListener("touchstart", onUserAction);
+        window.removeEventListener("wheel", onUserAction);
       };
     }
   }, [isVisible, startPlayback]);
@@ -128,9 +148,10 @@ export function FloatingVideoPopup() {
   const handleVideoClick = () => {
     if (!videoRef.current) return;
 
-    // If currently muted, tapping the video first un-mutes it for immediate audio
-    if (isMuted) {
+    // If somehow muted, tap immediately activates audio
+    if (videoRef.current.muted) {
       videoRef.current.muted = false;
+      videoRef.current.volume = 1.0;
       setIsMuted(false);
       if (videoRef.current.paused) {
         videoRef.current.play();
@@ -231,7 +252,7 @@ export function FloatingVideoPopup() {
               ref={videoRef}
               autoPlay
               loop
-              muted
+              muted={isMuted}
               playsInline
               preload="auto"
               onCanPlay={startPlayback}
@@ -249,16 +270,6 @@ export function FloatingVideoPopup() {
 
             {/* Subtle Gradient Overlay at bottom */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/15 to-transparent pointer-events-none" />
-
-            {/* Tap for Sound Floating Badge if currently muted */}
-            {isMuted && isPlaying && (
-              <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-                <span className="backdrop-blur-md bg-slate-950/85 border border-amber-400/40 text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-lg tracking-wide">
-                  <VolumeX size={11} className="text-[#c69c6d] animate-pulse" />
-                  <span>Tap for Sound</span>
-                </span>
-              </div>
-            )}
 
             {/* Play Indicator if paused */}
             {!isPlaying && (
