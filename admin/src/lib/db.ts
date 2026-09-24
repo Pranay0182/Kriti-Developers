@@ -1,7 +1,7 @@
 import pg from "pg";
 const { Pool } = pg;
 
-type QueryResult<T = any> = pg.QueryResult<T>;
+
 
 const globalWithPg = global as typeof globalThis & {
   _pgPool?: pg.Pool;
@@ -35,7 +35,7 @@ if (!globalWithPg._pgPool || globalWithPg._pgConnectionString !== connStr) {
 
   const baseQuery = newPool.query.bind(newPool);
 
-  (newPool as any).query = async function (text: any, params?: any): Promise<QueryResult<any>> {
+  (newPool as any).query = async function (text: any, params?: any): Promise<any> {
     if (typeof text === "string") {
       const trimmed = text.trim().toUpperCase();
       if (trimmed.startsWith("SELECT")) {
