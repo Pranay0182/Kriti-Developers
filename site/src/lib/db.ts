@@ -1,7 +1,7 @@
 import pg from "pg";
 const { Pool } = pg;
 
-type QueryResult<T = any> = pg.QueryResult<T>;
+type QueryResult<T extends pg.QueryResultRow = any> = pg.QueryResult<T>;
 
 const globalWithPg = global as typeof globalThis & {
   _pgPool?: pg.Pool;
