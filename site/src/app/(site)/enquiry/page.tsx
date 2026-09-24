@@ -156,25 +156,6 @@ export default function EnquiryPage() {
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                  Preferred Location
-                </label>
-                <select
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
-                >
-                  <option value="Ranchi">Ranchi (General)</option>
-                  <option value="Morabadi">Morabadi</option>
-                  <option value="Bariatu">Bariatu</option>
-                  <option value="Kanke Road">Kanke Road / Ring Road</option>
-                  <option value="Lalpur">Lalpur / Circular Road</option>
-                  <option value="Harmu / Argora">Harmu / Argora</option>
-                  <option value="Namkum / Hinoo">Namkum / Hinoo / Airport</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
                   Budget Range
                 </label>
                 <select

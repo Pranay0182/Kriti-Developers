@@ -145,4 +145,46 @@
       padding-right: 3rem;
     }
   }
+
+  /* Luxury Gold Metallic Utilities */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #e8cfad 0%, #c69c6d 45%, #9b7245 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gold-light {
+    background: linear-gradient(135deg, #f7ebd9 0%, #dfba8e 50%, #c69c6d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .bg-gold-gradient {
+    background: linear-gradient(135deg, #d8b082 0%, #c69c6d 50%, #b38553 100%);
+  }
+
+  .bg-gold-gradient-hover:hover {
+    background: linear-gradient(135deg, #e2be94 0%, #cca375 50%, #bc8f5d 100%);
+  }
+
+  .gold-glow {
+    box-shadow: 0 10px 30px -10px rgba(198, 156, 109, 0.35);
+  }
+
+  .gold-border-glow:hover {
+    border-color: rgba(198, 156, 109, 0.6);
+    box-shadow: 0 12px 35px -8px rgba(198, 156, 109, 0.25);
+  }
+
+  .glass-card-dark {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card-light {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
 }

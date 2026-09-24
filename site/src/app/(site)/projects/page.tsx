@@ -62,10 +62,10 @@ export default async function ProjectsPage({
       </section>
 
       {/* Projects Filter & Grid */}
-      <section className="py-16 md:py-24">
+      <section className="py-10 md:py-16">
         <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
           {/* Filters */}
-          <div className="flex flex-wrap justify-center gap-3 mb-16">
+          <div className="flex flex-wrap justify-center gap-3 mb-10">
             {[
               { label: "All", value: "ALL", href: "/projects" },
               { label: "Ongoing", value: "ONGOING", href: "/projects?filter=ongoing" },
