@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FloatingConcierge } from "@/components/FloatingConcierge";
+import { FloatingVideoPopup } from "@/components/FloatingVideoPopup";
 import { SmoothScroll } from "@/components/SmoothScroll";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <FloatingVideoPopup />
           <FloatingConcierge />
         </SmoothScroll>
       </body>
