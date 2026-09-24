@@ -9,8 +9,8 @@ export const metadata = {
 
 export default function AboutPage() {
   const stats = [
-    { value: "10+", label: "Years of Experience" },
-    { value: "5+", label: "Projects Delivered" },
+    { value: "40+", label: "Years of Experience" },
+    { value: "200+", label: "Projects Delivered" },
     { value: "500+", label: "Happy Families" },
     { value: "2M+", label: "Sq. Ft. Developed" },
   ];
@@ -171,40 +171,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 5. Leadership Team matching exact mockup */}
-      <section className="py-20 lg:py-28 bg-white">
-        <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-            <span className="text-[#c69c6d] font-bold tracking-[0.2em] uppercase text-xs block">
-              MANAGEMENT
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-slate-900 font-bold">
-              Leadership Team
-            </h2>
-            <p className="text-slate-500 text-sm">Guided by industry visionaries committed to architectural integrity and customer delight.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {leadership.map((leader, i) => (
-              <div key={i} className="bg-[#fafbfc] rounded-2xl overflow-hidden border border-slate-200/80 group">
-                <div className="relative h-80 overflow-hidden bg-slate-100">
-                  <Image
-                    src={leader.image}
-                    alt={leader.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6 space-y-2">
-                  <h3 className="font-serif text-xl font-bold text-slate-900">{leader.name}</h3>
-                  <p className="text-xs font-bold uppercase tracking-wider text-[#c69c6d]">{leader.role}</p>
-                  <p className="text-xs text-slate-600 leading-relaxed font-light pt-2">{leader.bio}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* 6. Our Presence Section matching exact mockup */}
       <section className="py-20 bg-[#0b1528] text-white">

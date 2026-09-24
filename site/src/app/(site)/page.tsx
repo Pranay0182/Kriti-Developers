@@ -319,7 +319,7 @@ export default async function Home() {
               fill
               className="object-cover object-right"
               style={{ objectFit: "cover", objectPosition: "right", width: "100%", height: "100%" }}
-              unoptimized
+              priority
             />
           </div>
         </div>
@@ -393,7 +393,6 @@ export default async function Home() {
               fill
               className="object-cover object-right"
               style={{ objectFit: "cover", objectPosition: "right", width: "100%", height: "100%" }}
-              unoptimized
             />
           </div>
         </div>
