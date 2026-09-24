@@ -1,18 +1,51 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { X, Volume2, VolumeX, Maximize2, Minimize2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export function FloatingVideoPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
-  const [isMuted, setIsMuted] = useState(false); // Audio ON by default per request
+  const [isMuted, setIsMuted] = useState(true); // Must start muted in DOM for reliable mobile/desktop autoplay
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Check session storage on mount & trigger on scroll down
+  // Attempt playback helper
+  const startPlayback = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // First attempt: try playing unmuted
+    video.muted = false;
+    const playPromise = video.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsMuted(false);
+          setIsPlaying(true);
+        })
+        .catch(() => {
+          // Browser policy blocked unmuted autoplay: immediately play muted so video moves automatically!
+          if (videoRef.current) {
+            videoRef.current.muted = true;
+            videoRef.current
+              .play()
+              .then(() => {
+                setIsMuted(true);
+                setIsPlaying(true);
+              })
+              .catch((err) => {
+                console.warn("Autoplay retry failed:", err);
+              });
+          }
+        });
+    }
+  }, []);
+
+  // Listen to scroll down to reveal and start playing
   useEffect(() => {
     try {
       const dismissed = sessionStorage.getItem("kriti_video_dismissed");
@@ -25,14 +58,14 @@ export function FloatingVideoPopup() {
     }
 
     const handleScroll = () => {
-      // Reveal popup when user scrolls down past 350px
-      if (window.scrollY > 350) {
+      // Reveal popup when user scrolls down past 200px
+      if (window.scrollY > 200) {
         setIsVisible(true);
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    // Check initial scroll position if user reloads halfway down
+    // Check initial scroll in case page loaded midway
     handleScroll();
 
     return () => {
@@ -40,47 +73,37 @@ export function FloatingVideoPopup() {
     };
   }, []);
 
-  // When popup becomes visible, ensure audio is unmuted and playing
+  // When visible, trigger immediate autoplay
   useEffect(() => {
-    if (isVisible && videoRef.current) {
-      videoRef.current.muted = false;
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setIsMuted(false);
-            setIsPlaying(true);
-          })
-          .catch(() => {
-            // Browser autoplay policy might require interaction before unmuted playback
-            // Start playing and unmute on user interaction
-            if (videoRef.current) {
-              videoRef.current.muted = true;
-              videoRef.current.play();
-              setIsMuted(true);
+    if (isVisible) {
+      startPlayback();
 
-              const enableAudio = () => {
-                if (videoRef.current) {
-                  videoRef.current.muted = false;
-                  setIsMuted(false);
-                }
-                window.removeEventListener("click", enableAudio);
-                window.removeEventListener("touchstart", enableAudio);
-                window.removeEventListener("scroll", enableAudio);
-              };
+      // One-time interaction listener to unmute if initially muted by browser policy
+      const unmuteOnInteraction = () => {
+        if (videoRef.current && videoRef.current.muted) {
+          videoRef.current.muted = false;
+          setIsMuted(false);
+        }
+        window.removeEventListener("click", unmuteOnInteraction);
+        window.removeEventListener("touchstart", unmuteOnInteraction);
+      };
 
-              window.addEventListener("click", enableAudio, { once: true });
-              window.addEventListener("touchstart", enableAudio, { once: true });
-              window.addEventListener("scroll", enableAudio, { once: true });
-            }
-          });
-      }
+      window.addEventListener("click", unmuteOnInteraction, { once: true });
+      window.addEventListener("touchstart", unmuteOnInteraction, { once: true });
+
+      return () => {
+        window.removeEventListener("click", unmuteOnInteraction);
+        window.removeEventListener("touchstart", unmuteOnInteraction);
+      };
     }
-  }, [isVisible]);
+  }, [isVisible, startPlayback]);
 
   const handleDismiss = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDismissed(true);
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
     try {
       sessionStorage.setItem("kriti_video_dismissed", "true");
     } catch {
@@ -91,8 +114,9 @@ export function FloatingVideoPopup() {
   const toggleSound = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+      const newMuted = !videoRef.current.muted;
+      videoRef.current.muted = newMuted;
+      setIsMuted(newMuted);
     }
   };
 
@@ -101,8 +125,21 @@ export function FloatingVideoPopup() {
     setIsExpanded(!isExpanded);
   };
 
-  const togglePlay = () => {
+  const handleVideoClick = () => {
     if (!videoRef.current) return;
+
+    // If currently muted, tapping the video first un-mutes it for immediate audio
+    if (isMuted) {
+      videoRef.current.muted = false;
+      setIsMuted(false);
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+      return;
+    }
+
+    // Toggle pause/play
     if (videoRef.current.paused) {
       videoRef.current.play();
       setIsPlaying(true);
@@ -185,7 +222,7 @@ export function FloatingVideoPopup() {
 
           {/* Video Player */}
           <div
-            onClick={togglePlay}
+            onClick={handleVideoClick}
             className={`relative bg-black cursor-pointer overflow-hidden ${
               isExpanded ? "aspect-video sm:aspect-square md:aspect-[4/5] max-h-[70vh]" : "aspect-[9/14] sm:aspect-[4/5]"
             }`}
@@ -194,9 +231,12 @@ export function FloatingVideoPopup() {
               ref={videoRef}
               autoPlay
               loop
-              muted={isMuted}
+              muted
               playsInline
-              preload="metadata"
+              preload="auto"
+              onCanPlay={startPlayback}
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
               className="w-full h-full object-cover select-none"
             >
               {/* Cloudflare R2 Stream URL */}
@@ -207,8 +247,18 @@ export function FloatingVideoPopup() {
               Your browser does not support the video tag.
             </video>
 
-            {/* Subtle Gradient Overlay at bottom for contrast */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent pointer-events-none" />
+            {/* Subtle Gradient Overlay at bottom */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/15 to-transparent pointer-events-none" />
+
+            {/* Tap for Sound Floating Badge if currently muted */}
+            {isMuted && isPlaying && (
+              <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+                <span className="backdrop-blur-md bg-slate-950/85 border border-amber-400/40 text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-lg tracking-wide">
+                  <VolumeX size={11} className="text-[#c69c6d] animate-pulse" />
+                  <span>Tap for Sound</span>
+                </span>
+              </div>
+            )}
 
             {/* Play Indicator if paused */}
             {!isPlaying && (
