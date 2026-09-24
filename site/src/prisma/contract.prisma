@@ -1,0 +1,112 @@
+// use prisma-8
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Project {
+  id            String         @id @default(uuid())
+  title         String
+  slug          String         @unique
+  subtitle      String?
+  description   String
+  status        ProjectStatus  @default(ONGOING)
+  type          String         @default("Residential")
+  location      String
+  configuration String
+  possession    String
+  heroImage     String?
+  brochureUrl   String?
+  videoUrl      String?
+  isFeatured    Boolean        @default(false)
+  createdAt     TimestamptzString @default(now())
+  updatedAt     temporal.updatedAtString()
+  
+  images        ProjectImage[]
+  amenities     Amenity[]
+  floorPlans    FloorPlan[]
+  landmarks     Landmark[]
+  specifications Specification[]
+}
+
+enum ProjectStatus {
+  ONGOING
+  UPCOMING
+  COMPLETED
+}
+
+model ProjectImage {
+  id        String   @id @default(uuid())
+  url       String
+  altText   String?
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Amenity {
+  id        String   @id @default(uuid())
+  name      String
+  icon      String?
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model FloorPlan {
+  id        String   @id @default(uuid())
+  name      String
+  planType  String?
+  url       String
+  size      String?
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Landmark {
+  id        String   @id @default(uuid())
+  name      String
+  distance  String
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Specification {
+  id        String   @id @default(uuid())
+  category  String
+  details   String
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+enum GalleryCategory {
+  PROJECTS
+  INTERIORS
+  AMENITIES
+  CONSTRUCTION
+}
+
+model GalleryItem {
+  id        String          @id @default(uuid())
+  title     String?
+  category  GalleryCategory @default(PROJECTS)
+  url       String
+  createdAt TimestamptzString @default(now())
+}
+
+model Enquiry {
+  id          String   @id @default(uuid())
+  name        String
+  phone       String
+  email       String
+  projectId   String?
+  location    String?
+  budget      String?
+  message     String?
+  source      String   @default("ENQUIRY_PAGE")
+  status      String   @default("NEW")
+  createdAt   TimestamptzString @default(now())
+}

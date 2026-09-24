@@ -1,0 +1,33 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # Runs every Monday and Thursday at 06:00 UTC (11:30 AM IST)
+    - cron: '0 6 * * 1,4'
+  workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "DATABASE_URL secret is not set yet. Please set it in Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          # Run lightweight query to keep Supabase active
+          node -e "
+            const { Pool } = require('pg');
+            const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+            pool.query('SELECT 1;', (err, res) => {
+              if (err) {
+                console.error('Error pinging database:', err.message);
+                process.exit(1);
+              }
+              console.log('Successfully pinged Supabase! Keep-alive verified.');
+              pool.end();
+            });
+          "
