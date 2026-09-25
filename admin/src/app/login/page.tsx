@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Lock, Mail, Eye, EyeOff, ShieldCheck, Loader2, ArrowRight, Sparkles } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, ShieldCheck, Loader2, ArrowRight } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/";
@@ -43,6 +43,97 @@ export default function LoginPage() {
   };
 
   return (
+    <div className="backdrop-blur-xl bg-[#0b1528]/80 border border-amber-400/25 rounded-3xl p-7 sm:p-9 shadow-[0_25px_60px_rgba(0,0,0,0.7)]">
+      <div className="mb-6">
+        <h2 className="text-lg font-bold text-white tracking-tight">Portal Authentication</h2>
+        <p className="text-xs text-slate-400 mt-1 font-light">
+          Enter your executive credentials to manage projects, enquiries, and media assets.
+        </p>
+      </div>
+
+      {error && (
+        <div className="mb-5 p-3.5 rounded-xl bg-rose-950/50 border border-rose-500/40 text-rose-200 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
+          <span className="text-rose-400 font-bold text-sm leading-none mt-0.5">!</span>
+          <p className="leading-relaxed">{error}</p>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Email Field */}
+        <div>
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+            Admin User ID / Email
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <Mail className="w-4 h-4" />
+            </div>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder=""
+              autoComplete="username"
+              className="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#c69c6d] focus:ring-1 focus:ring-[#c69c6d] transition"
+            />
+          </div>
+        </div>
+
+        {/* Password Field */}
+        <div>
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+            Admin Password
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <Lock className="w-4 h-4" />
+            </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder=""
+              autoComplete="current-password"
+              className="w-full pl-10 pr-11 py-3 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#c69c6d] focus:ring-1 focus:ring-[#c69c6d] transition font-mono tracking-wider"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full mt-2 bg-gradient-to-r from-[#d8b082] via-[#c69c6d] to-[#b38553] hover:brightness-105 active:scale-[0.99] text-slate-950 font-bold py-3.5 rounded-xl text-xs uppercase tracking-[0.16em] transition-all shadow-[0_10px_25px_rgba(198,156,109,0.3)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>Verifying Credentials...</span>
+            </>
+          ) : (
+            <>
+              <span>Sign In to Dashboard</span>
+              <ArrowRight className="w-4 h-4" />
+            </>
+          )}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#050b14] text-white relative overflow-hidden px-4 sm:px-6">
       {/* Background ambient gold luxury glows */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,_rgba(198,156,109,0.15)_0%,_transparent_70%)] pointer-events-none" />
@@ -72,93 +163,17 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Card Body */}
-        <div className="backdrop-blur-xl bg-[#0b1528]/80 border border-amber-400/25 rounded-3xl p-7 sm:p-9 shadow-[0_25px_60px_rgba(0,0,0,0.7)]">
-          <div className="mb-6">
-            <h2 className="text-lg font-bold text-white tracking-tight">Portal Authentication</h2>
-            <p className="text-xs text-slate-400 mt-1 font-light">
-              Enter your executive credentials to manage projects, enquiries, and media assets.
-            </p>
-          </div>
-
-          {error && (
-            <div className="mb-5 p-3.5 rounded-xl bg-rose-950/50 border border-rose-500/40 text-rose-200 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
-              <span className="text-rose-400 font-bold text-sm leading-none mt-0.5">!</span>
-              <p className="leading-relaxed">{error}</p>
+        {/* Card Body wrapped in Suspense for useSearchParams */}
+        <Suspense
+          fallback={
+            <div className="backdrop-blur-xl bg-[#0b1528]/80 border border-amber-400/25 rounded-3xl p-12 flex flex-col items-center justify-center">
+              <Loader2 className="w-8 h-8 text-[#c69c6d] animate-spin mb-3" />
+              <p className="text-xs text-slate-400 uppercase tracking-widest">Loading Portal...</p>
             </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email Field */}
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                Admin User ID / Email
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Mail className="w-4 h-4" />
-                </div>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder=""
-                  autoComplete="username"
-                  className="w-full pl-10 pr-4 py-3 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#c69c6d] focus:ring-1 focus:ring-[#c69c6d] transition"
-                />
-              </div>
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                Admin Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-4 h-4" />
-                </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder=""
-                  autoComplete="current-password"
-                  className="w-full pl-10 pr-11 py-3 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#c69c6d] focus:ring-1 focus:ring-[#c69c6d] transition font-mono tracking-wider"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full mt-2 bg-gradient-to-r from-[#d8b082] via-[#c69c6d] to-[#b38553] hover:brightness-105 active:scale-[0.99] text-slate-950 font-bold py-3.5 rounded-xl text-xs uppercase tracking-[0.16em] transition-all shadow-[0_10px_25px_rgba(198,156,109,0.3)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Verifying Credentials...</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign In to Dashboard</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
-          </form>
-        </div>
+          }
+        >
+          <LoginForm />
+        </Suspense>
 
         {/* Security Badge Footer */}
         <div className="mt-6 text-center text-[11px] text-slate-500 flex items-center justify-center gap-2">
