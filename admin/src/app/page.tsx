@@ -94,8 +94,8 @@ export default async function AdminDashboardPage() {
           <div className="bg-[#0b1528] text-white p-6 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between">
             <div>
               <span className="text-xs font-semibold uppercase tracking-wider text-[#c69c6d]">Customer Trust</span>
-              <p className="text-2xl font-bold mt-2">500+ Families</p>
-              <p className="text-xs text-slate-300 mt-1">2M+ Sq. Ft. developed across Ranchi</p>
+              <p className="text-2xl font-bold mt-2">50+ Developments</p>
+              <p className="text-xs text-slate-300 mt-1">Duplex, Simplex and Apartments in Ranchi</p>
             </div>
             <a
               href="http://localhost:3000"

@@ -4,34 +4,34 @@ import { ArrowRight, Award, Shield, Lightbulb, CheckCircle2, Building, Users, Ca
 
 export const metadata = {
   title: "About Us | Kriti Developers",
-  description: "Building With Purpose. We create spaces that inspire better living for generations across Ranchi, Jharkhand.",
+  description: "A leading construction firm in Ranchi, shaping the real estate landscape for more than two decades with over 35 years of industry leadership.",
 };
 
 export default function AboutPage() {
   const stats = [
-    { value: "40+", label: "Years of Experience" },
-    { value: "200+", label: "Projects Delivered" },
-    { value: "500+", label: "Happy Families" },
-    { value: "2M+", label: "Sq. Ft. Developed" },
+    { value: "40+", label: "Years Industry Background" },
+    { value: "20+", label: "Years Shaping Ranchi" },
+    { value: "50+", label: "Duplex, Simplex & Apartments" },
+    { value: "100%", label: "Quality Construction" },
   ];
 
   const values = [
     {
-      title: "Quality",
-      subtitle: "Uncompromising standards",
-      description: "From foundation to finishing, we employ the finest construction materials and rigorous engineering checks.",
+      title: "Quality Construction",
+      subtitle: "Uncompromised efficacy",
+      description: "From foundation to finishing, we employ the finest construction materials and rigorous engineering standards.",
       icon: Award,
     },
     {
-      title: "Integrity",
-      subtitle: "Transparent and trustworthy",
-      description: "Clear communication at every phase, on-schedule delivery, and zero hidden clauses for complete peace of mind.",
+      title: "Trust & Transparency",
+      subtitle: "Built on commitment",
+      description: "Clear communication, transparent dealings, on-schedule delivery, and zero hidden clauses for complete peace of mind.",
       icon: Shield,
     },
     {
-      title: "Innovation",
-      subtitle: "Forward-thinking designs",
-      description: "Smart space optimization, sustainable energy features, and architectural aesthetics built to withstand generations.",
+      title: "Innovative Designs",
+      subtitle: "Forward-thinking living",
+      description: "Smart space optimization, modern aesthetics, and functional architecture built to exceed customer expectations.",
       icon: Lightbulb,
     },
   ];
@@ -59,7 +59,7 @@ export default function AboutPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* 1. Hero Section matching mockup Image 4 */}
+      {/* 1. Hero Section */}
       <section className="relative py-20 lg:py-28 bg-[#fafbfc] border-b border-slate-100">
         <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -68,11 +68,11 @@ export default function AboutPage() {
                 ABOUT KRITI DEVELOPERS
               </span>
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-slate-900 leading-[1.15] font-bold tracking-tight">
-                Building <br />
-                <span className="text-[#c69c6d] italic font-normal">With Purpose.</span>
+                Building on Trust. <br />
+                <span className="text-[#c69c6d] italic font-normal">Delivering with Efficacy.</span>
               </h1>
               <p className="text-slate-600 text-lg leading-relaxed max-w-xl font-light">
-                We create spaces that inspire better living for generations across Ranchi. Every structure we raise is crafted with unwavering precision, timeless elegance, and human-centric design.
+                Kriti Developers is a leading construction firm in the city of Ranchi, built on a foundation of trust and commitment to exceed customer expectations. We are dedicated to providing exceptional service across residential projects, commercial developments, and land acquisitions.
               </p>
 
               <div className="pt-2">
@@ -88,7 +88,7 @@ export default function AboutPage() {
             <div className="relative h-[420px] lg:h-[500px] rounded-2xl overflow-hidden shadow-xl border border-slate-200">
               <Image
                 src="https://pub-a960e227e6d7427991deaa543564e119.r2.dev/1790196626089-whatsapp-image-2026-09-22-at-5.10.48-pm.avif"
-                alt="Building With Purpose"
+                alt="Kriti Developers Ranchi"
                 fill
                 className="object-cover"
                 priority
@@ -98,32 +98,38 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 2. Our Story Section matching mockup */}
+      {/* 2. Our Story Section */}
       <section className="py-20 bg-white">
         <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl space-y-6">
+          <div className="max-w-4xl space-y-6">
             <span className="text-[#c69c6d] font-bold tracking-[0.2em] uppercase text-xs block">
-              OUR STORY
+              OUR STORY & LEGACY
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-slate-900 font-bold">
-              Crafting Ranchi's Finest Addresses
+              Shaping Ranchi&apos;s Real Estate Landscape for Over Two Decades
             </h2>
-            <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-              Kriti Developers was founded with a simple vision: to create high-quality, thoughtfully designed spaces that enhance the lives of our customers. Over the last decade, we have transformed visionary architectural blueprints into thriving communities where families grow and memories flourish across Ranchi, Jharkhand.
+            <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light">
+              We have been shaping the real estate landscape in Ranchi for more than two decades, and the partners of the firm independently bring a background of over 35 years in the real estate industry.
             </p>
-            <div>
+            <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light">
+              Renowned for our quality construction, innovative designs, and exceptional customer service, the projects undertaken by us range from low-cost housing to high-end bungalows and multi-storeyed apartments in premier localities like Kanke Road, Morabadi, Chiraundi, Ratu Road, Doranda, and beyond.
+            </p>
+            <p className="text-slate-700 text-base md:text-lg font-medium">
+              We are committed to deliver on time with uncompromised efficacy.
+            </p>
+            <div className="pt-2">
               <Link
                 href="/projects"
                 className="inline-flex items-center gap-2 bg-[#c69c6d] hover:bg-[#b58b5c] text-slate-950 font-bold px-6 py-3 rounded text-xs uppercase tracking-wider transition shadow-sm"
               >
-                Our Journey <ArrowRight className="w-4 h-4" />
+                Our Developments <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. Stats Row matching exact mockup */}
+      {/* 3. Stats Row */}
       <section className="py-16 bg-[#0b1528] text-white">
         <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-800 text-center">
@@ -188,7 +194,7 @@ export default function AboutPage() {
               </p>
 
               <div className="flex flex-wrap gap-3 pt-2">
-                {["Morabadi", "Kanke Road", "Bariatu", "Lalpur", "Harmu"].map((locality, idx) => (
+                {["Morabadi", "Kanke Road", "Doranda", "Ratu Road", "Chiraundi"].map((locality, idx) => (
                   <span
                     key={idx}
                     className={`px-4 py-2 rounded-full text-xs font-semibold ${

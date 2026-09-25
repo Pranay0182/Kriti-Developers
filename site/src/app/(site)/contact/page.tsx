@@ -105,7 +105,7 @@ export default function ContactPage() {
                     <div>
                       <p className="font-bold text-slate-900 uppercase text-xs tracking-wider">Office Address</p>
                       <p className="text-slate-600 mt-1 leading-relaxed">
-                        Kriti Developers, Circular Road, Lalpur, Ranchi, Jharkhand - 834001
+                        Kriti Developers, Ground Floor, Hotel Ganga Ashram, Kutchery Chowk, Ranchi, Jharkhand
                       </p>
                     </div>
                   </div>
@@ -128,8 +128,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-bold text-slate-900 uppercase text-xs tracking-wider">Email</p>
-                      <a href="mailto:info@kritidevelopers.in" className="text-slate-700 hover:text-[#c69c6d] mt-1 block font-medium">
-                        info@kritidevelopers.in
+                      <a href="mailto:kritidevelopersrnc@gmail.com" className="text-slate-700 hover:text-[#c69c6d] mt-1 block font-medium">
+                        kritidevelopersrnc@gmail.com
                       </a>
                     </div>
                   </div>

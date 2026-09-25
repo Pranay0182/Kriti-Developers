@@ -70,7 +70,7 @@ export function FloatingConcierge() {
               </div>
               <div className="flex-1">
                 <div>Book Private Site Tour</div>
-                <div className="text-[10px] text-slate-900/80 font-medium">Morabadi & Bariatu</div>
+                <div className="text-[10px] text-slate-900/80 font-medium">Ranchi Prime Localities</div>
               </div>
             </Link>
           </div>

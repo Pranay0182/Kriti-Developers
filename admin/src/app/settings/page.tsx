@@ -38,15 +38,17 @@ export default function AdminSettingsPage() {
       ctaText: "Enquire Now",
     },
     milestones: {
-      yearsExperience: "10+",
-      projectsDelivered: "5+",
-      happyFamilies: "500+",
-      sqftDeveloped: "2M+",
+      yearsExperience: "40+",
+      ranchiExperience: "20+",
+      projectsDelivered: "50+",
+      qualityConstruction: "100%",
+      happyFamilies: "50+",
+      sqftDeveloped: "Duplex, Simplex & Apartments",
     },
     contact: {
-      officeAddress: "Kriti Developers, Circular Road, Lalpur, Ranchi, Jharkhand - 834001",
+      officeAddress: "Kriti Developers, Ground Floor, Hotel Ganga Ashram, Kutchery Chowk Ranchi",
       phone: "+91 95708 22345",
-      email: "info@kritidevelopers.in",
+      email: "kritidevelopersrnc@gmail.com",
       workingHoursMonSat: "Mon - Sat: 9:00 AM - 7:00 PM",
       workingHoursSun: "Sun: 10:00 AM - 4:00 PM",
     },
@@ -411,10 +413,10 @@ export default function AdminSettingsPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Years Experience</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Years Industry Legacy</label>
                 <input
                   type="text"
-                  value={settings.milestones.yearsExperience}
+                  value={settings.milestones.yearsExperience || "40+"}
                   onChange={(e) =>
                     setSettings({
                       ...settings,
@@ -426,14 +428,14 @@ export default function AdminSettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Projects Delivered</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Years in Ranchi</label>
                 <input
                   type="text"
-                  value={settings.milestones.projectsDelivered}
+                  value={settings.milestones.ranchiExperience || "20+"}
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      milestones: { ...settings.milestones, projectsDelivered: e.target.value },
+                      milestones: { ...settings.milestones, ranchiExperience: e.target.value },
                     })
                   }
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
@@ -441,14 +443,18 @@ export default function AdminSettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Happy Families</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Duplex, Simplex & Apartments</label>
                 <input
                   type="text"
-                  value={settings.milestones.happyFamilies}
+                  value={settings.milestones.projectsDelivered || "50+"}
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      milestones: { ...settings.milestones, happyFamilies: e.target.value },
+                      milestones: { 
+                        ...settings.milestones, 
+                        projectsDelivered: e.target.value,
+                        happyFamilies: e.target.value 
+                      },
                     })
                   }
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
@@ -456,14 +462,18 @@ export default function AdminSettingsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">Area Developed</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Quality Construction</label>
                 <input
                   type="text"
-                  value={settings.milestones.sqftDeveloped}
+                  value={settings.milestones.qualityConstruction || "100%"}
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      milestones: { ...settings.milestones, sqftDeveloped: e.target.value },
+                      milestones: { 
+                        ...settings.milestones, 
+                        qualityConstruction: e.target.value,
+                        sqftDeveloped: "100% Quality Construction"
+                      },
                     })
                   }
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"

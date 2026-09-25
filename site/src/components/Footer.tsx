@@ -19,12 +19,12 @@ export function Footer() {
               />
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed font-light">
-              Crafting architectural landmarks and sustainable residential communities across Ranchi, Jharkhand for over a decade.
+              Crafting architectural landmarks and sustainable residential communities across Ranchi, Jharkhand for four decades.
             </p>
             <div className="text-xs text-slate-400 pt-2 space-y-1.5 font-light">
-              <p className="text-slate-300">Circular Road, Lalpur, Ranchi, Jharkhand - 834001</p>
+              <p className="text-slate-300">Ground Floor, Hotel Ganga Ashram, Kutchery Chowk, Ranchi, Jharkhand</p>
               <p>Direct Desk: <a href="tel:+919570822345" className="text-[#dfba8e] hover:underline font-semibold">+91 95708 22345</a></p>
-              <p>Email: <a href="mailto:info@kritidevelopers.in" className="text-slate-300 hover:text-[#c69c6d] transition-colors">info@kritidevelopers.in</a></p>
+              <p>Email: <a href="mailto:kritidevelopersrnc@gmail.com" className="text-slate-300 hover:text-[#c69c6d] transition-colors">kritidevelopersrnc@gmail.com</a></p>
             </div>
           </div>
 

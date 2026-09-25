@@ -28,10 +28,10 @@ export default async function Home() {
   let findYourNextImage = "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/1790196626089-whatsapp-image-2026-09-22-at-5.10.48-pm.avif";
   let findYourNextCta = "Enquire Now";
 
-  let yearsExperience = "10+";
-  let projectsDelivered = "5+";
-  let happyFamilies = "500+";
-  let sqftDeveloped = "2M+";
+  let yearsExperience = "40+";
+  let ranchiExperience = "20+";
+  let projectsDelivered = "50+";
+  let qualityConstruction = "100%";
 
   let settingsMap: Record<string, any> = {};
 
@@ -71,13 +71,19 @@ export default async function Home() {
 
     if (settingsMap.milestones) {
       if (settingsMap.milestones.yearsExperience) yearsExperience = settingsMap.milestones.yearsExperience;
-      if (settingsMap.milestones.projectsDelivered) projectsDelivered = settingsMap.milestones.projectsDelivered;
-      if (settingsMap.milestones.happyFamilies) happyFamilies = settingsMap.milestones.happyFamilies;
-      if (settingsMap.milestones.sqftDeveloped) sqftDeveloped = settingsMap.milestones.sqftDeveloped;
+      if (settingsMap.milestones.ranchiExperience) ranchiExperience = settingsMap.milestones.ranchiExperience;
+      if (settingsMap.milestones.projectsDelivered) {
+        const pd = String(settingsMap.milestones.projectsDelivered);
+        projectsDelivered = pd.includes("50+") ? "50+" : pd;
+      } else if (settingsMap.milestones.happyFamilies && settingsMap.milestones.happyFamilies !== "500+") {
+        projectsDelivered = String(settingsMap.milestones.happyFamilies);
+      }
+      if (settingsMap.milestones.qualityConstruction) qualityConstruction = settingsMap.milestones.qualityConstruction;
     }
 
-    // 2. Landmark Projects (show all projects from admin, ongoing, upcoming, and completed)
+    // 2. Ongoing & Upcoming Projects for Landmark Projects
     activeProjects = allProjects
+      .filter(p => p.status === 'ONGOING' || p.status === 'UPCOMING')
       .map(p => ({
         title: p.title,
         slug: p.slug,
@@ -87,7 +93,19 @@ export default async function Home() {
         imageUrl: p.heroImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
       }));
 
-    // 3. Featured Project fallback from DB if not customized
+    // 3. Completed Projects for Delivered Projects section
+    completedProjects = allProjects
+      .filter(p => p.status === 'COMPLETED')
+      .map(p => ({
+        title: p.title,
+        slug: p.slug,
+        location: p.location,
+        configuration: p.configuration,
+        status: p.status as ProjectStatus,
+        imageUrl: p.heroImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
+      }));
+
+    // 4. Featured Project fallback from DB if not customized
     featuredProject = allProjects.find(p => p.isFeatured) || allProjects.find(p => p.status === 'ONGOING') || allProjects[0];
     if (featuredProject && !settingsMap.featured?.title) {
       featuredTitle = featuredProject.title;
@@ -96,19 +114,6 @@ export default async function Home() {
       if (featuredProject.heroImage) featuredImage = featuredProject.heroImage;
       featuredSlug = featuredProject.slug;
     }
-
-    // 4. Completed Projects
-    const completedList = allProjects.filter(p => p.status === 'COMPLETED');
-    if (!settingsMap.milestones?.projectsDelivered) {
-      projectsDelivered = `${Math.max(completedList.length, 5)}+`;
-    }
-    completedProjects = completedList.slice(0, 3).map(p => ({
-      title: p.title,
-      slug: p.slug,
-      location: p.location,
-      year: p.possession ? p.possession.replace(/[^0-9]/g, "") || "Delivered" : "Delivered",
-      img: p.heroImage || "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop"
-    }));
   } catch (err) {
     console.error("DB error fetching home projects:", err);
   }
@@ -223,6 +228,46 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Delivered Projects Section - Completed residences */}
+      {completedProjects.length > 0 && (
+        <section className="py-12 sm:py-16 md:py-20 bg-slate-50 border-t border-slate-100 relative">
+          <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
+            <ScrollReveal direction="up">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-6 border-b border-slate-200 pb-5">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-800 text-xs font-bold tracking-[0.2em] uppercase mb-2.5 border border-emerald-200/50">
+                    <span>✦</span>
+                    <span>Delivered Landmarks</span>
+                  </div>
+                  <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-slate-950 font-bold tracking-tight">
+                    Delivered Projects
+                  </h2>
+                  <p className="text-base md:text-lg text-slate-500 font-light mt-1.5 max-w-xl">
+                    Successfully completed and handed-over residences across Ranchi.
+                  </p>
+                </div>
+                <Link 
+                  href="/projects?filter=completed" 
+                  prefetch={true}
+                  className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-900 hover:text-[#c69c6d] transition-colors py-2 px-4 rounded-full border border-slate-200 hover:border-[#c69c6d]/50 bg-white shadow-2xs"
+                >
+                  <span>View All Delivered</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 text-[#c69c6d]" />
+                </Link>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={150} direction="up">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                {completedProjects.map((project, i) => (
+                  <ProjectCard key={i} {...project} />
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
+
       {/* About Kriti Developers - Editorial Heritage Section */}
       <section className="py-12 sm:py-16 md:py-20 bg-[#fafbfc] border-t border-slate-100 relative overflow-hidden">
         <div className="container max-w-[1536px] mx-auto px-6 lg:px-12 relative z-10">
@@ -239,7 +284,7 @@ export default async function Home() {
                 </h2>
 
                 <p className="text-slate-600 text-base md:text-lg mb-6 leading-relaxed font-light">
-                  At Kriti Developers, we believe homes are more than physical structures—they are sanctuaries where generations thrive. With a decade of dedicated craftsmanship in Ranchi, Jharkhand, our philosophy is anchored in structural integrity, timeless aesthetics, and uncompromising transparency.
+                  At Kriti Developers, we believe homes are more than physical structures—they are sanctuaries where generations thrive. With four decades of dedicated craftsmanship in Ranchi, Jharkhand, our philosophy is anchored in structural integrity, timeless aesthetics, and uncompromising transparency.
                 </p>
 
                 {/* Value Pillars List */}
@@ -296,11 +341,11 @@ export default async function Home() {
                   <div className="absolute bottom-6 left-6 right-6 backdrop-blur-md bg-slate-950/80 p-5 rounded-2xl border border-white/10 text-white shadow-xl flex items-center justify-between">
                     <div>
                       <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#dfba8e]">Proven Track Record</p>
-                      <p className="font-serif text-xl font-bold mt-0.5">Over 2 Million Sq. Ft.</p>
-                      <p className="text-xs text-slate-300 font-light">Crafted with architectural integrity</p>
+                      <p className="font-serif text-xl font-bold mt-0.5">35+ Years of Trust</p>
+                      <p className="text-xs text-slate-300 font-light">Built on commitment and efficacy</p>
                     </div>
                     <div className="w-12 h-12 rounded-full bg-gold-gradient flex items-center justify-center text-slate-950 font-bold text-sm shrink-0 shadow">
-                      10+ Yrs
+                      35+ Yrs
                     </div>
                   </div>
                 </div>
@@ -320,25 +365,25 @@ export default async function Home() {
                 <span className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gold-gradient mb-1.5 tracking-tight">
                   {yearsExperience}
                 </span>
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.18em]">Years of Legacy</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.18em]">Years Industry Legacy</span>
+              </div>
+              <div className="flex flex-col items-center justify-center text-center p-3 pt-6 md:pt-3">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gold-gradient mb-1.5 tracking-tight">
+                  {ranchiExperience}
+                </span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.18em]">Years in Ranchi</span>
               </div>
               <div className="flex flex-col items-center justify-center text-center p-3 pt-6 md:pt-3">
                 <span className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gold-gradient mb-1.5 tracking-tight">
                   {projectsDelivered}
                 </span>
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.18em]">Projects Delivered</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.18em]">Duplex, Simplex & Apartments</span>
               </div>
               <div className="flex flex-col items-center justify-center text-center p-3 pt-6 md:pt-3">
                 <span className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gold-gradient mb-1.5 tracking-tight">
-                  {happyFamilies}
+                  {qualityConstruction}
                 </span>
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.18em]">Delighted Families</span>
-              </div>
-              <div className="flex flex-col items-center justify-center text-center p-3 pt-6 md:pt-3">
-                <span className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gold-gradient mb-1.5 tracking-tight">
-                  {sqftDeveloped}
-                </span>
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.18em]">Sq. Ft. Developed</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.18em]">Quality Construction</span>
               </div>
             </div>
           </ScrollReveal>
@@ -369,7 +414,7 @@ export default async function Home() {
                 { 
                   num: "01",
                   title: "Prime Locations", 
-                  desc: "Strategic addresses in Morabadi, Bariatu, and Kanke Road with immediate proximity to top schools, hospitals, and transit hubs.", 
+                  desc: "Strategic addresses in Morabadi, Kanke Road, Doranda, Ratu Road, and Chiraundi with immediate proximity to top schools, hospitals, and transit hubs.", 
                   icon: <MapPin className="h-6 w-6 text-[#c69c6d]" /> 
                 },
                 { 
@@ -614,7 +659,7 @@ export default async function Home() {
           </ScrollReveal>
           
           <ScrollReveal delay={150} direction="up">
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 items-stretch">
               {/* Headquarters Card */}
               <div className="md:col-span-1 flex flex-col justify-center p-8 rounded-3xl border border-[#c69c6d]/40 bg-gradient-to-b from-[#fdfbf9] to-[#fbf7f1] shadow-md">
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/15 flex items-center justify-center mb-4 text-[#c69c6d]">
@@ -629,8 +674,9 @@ export default async function Home() {
               {[
                 { name: "Morabadi", desc: "Tagore Hill & Morabadi Ground Corridor", tag: "Prime Residential" },
                 { name: "Kanke Road", desc: "Urban Arterial Hub & Premium Living", tag: "High Demand Zone" },
-                { name: "Bariatu", desc: "Healthcare Hub & Serene Landscapes", tag: "Active Growth" },
-                { name: "Lalpur", desc: "Central Commercial & Downtown Enclave", tag: "Delivered Enclave" }
+                { name: "Doranda", desc: "Historic Cultural Corridor & South Ranchi Hub", tag: "Established Zone" },
+                { name: "Ratu Road", desc: "Tilla Chowk Corridor & Central Connectivity", tag: "Prime Corridor" },
+                { name: "Chiraundi", desc: "Serene Residential Landscape & Growth Hub", tag: "Emerging Enclave" }
               ].map((locality, i) => (
                 <div key={i} className="group p-7 rounded-3xl border border-slate-200/80 bg-[#fdfdfd] hover:border-[#c69c6d]/50 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
                   <div>
