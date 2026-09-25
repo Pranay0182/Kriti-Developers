@@ -4,7 +4,7 @@ import { ArrowRight, Award, Shield, Lightbulb, CheckCircle2, Building, Users, Ca
 
 export const metadata = {
   title: "About Us | Kriti Developers",
-  description: "A leading construction firm in Ranchi, shaping the real estate landscape for more than two decades with over 35 years of industry leadership.",
+  description: "An experienced construction firm in Ranchi, shaping the real estate landscape for more than two decades with partners having over 40 years of industry experience.",
 };
 
 export default function AboutPage() {
@@ -36,27 +36,6 @@ export default function AboutPage() {
     },
   ];
 
-  const leadership = [
-    {
-      name: "Rajesh Kumar",
-      role: "Managing Director",
-      bio: "Over 20 years of real estate leadership, guiding Kriti Developers from foundation to Jharkhand's premier luxury home builder.",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop",
-    },
-    {
-      name: "Anita Sharma",
-      role: "Director",
-      bio: "Spearheading sustainable architecture and client-centric designs that elevate everyday lifestyle and well-being.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop",
-    },
-    {
-      name: "Vikram Sethi",
-      role: "Head - Projects",
-      bio: "Oversees site engineering excellence, strict safety compliance, and on-time structural handovers across all developments.",
-      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop",
-    },
-  ];
-
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* 1. Hero Section */}
@@ -72,7 +51,7 @@ export default function AboutPage() {
                 <span className="text-[#c69c6d] italic font-normal">Delivering with Efficacy.</span>
               </h1>
               <p className="text-slate-600 text-lg leading-relaxed max-w-xl font-light">
-                Kriti Developers is a leading construction firm in the city of Ranchi, built on a foundation of trust and commitment to exceed customer expectations. We are dedicated to providing exceptional service across residential projects, commercial developments, and land acquisitions.
+                Kriti Developers is an experienced construction firm in the city of Ranchi, built on a foundation of trust and commitment to exceed customer expectations. We are dedicated to providing exceptional service in the real estate industry, focusing on residential projects, commercial projects, and land development.
               </p>
 
               <div className="pt-2">
@@ -109,13 +88,16 @@ export default function AboutPage() {
               Shaping Ranchi&apos;s Real Estate Landscape for Over Two Decades
             </h2>
             <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light">
-              We have been shaping the real estate landscape in Ranchi for more than two decades, and the partners of the firm independently bring a background of over 35 years in the real estate industry.
+              Kriti Developers is an experienced construction firm in the city of Ranchi, built on a foundation of trust and commitment to exceed customer expectations. We are dedicated to providing exceptional service in the real estate industry, focusing on residential projects, commercial projects, and land development.
             </p>
             <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light">
-              Renowned for our quality construction, innovative designs, and exceptional customer service, the projects undertaken by us range from low-cost housing to high-end bungalows and multi-storeyed apartments in premier localities like Kanke Road, Morabadi, Chiraundi, Ratu Road, Doranda, and beyond.
+              We are renowned for our quality construction, innovative designs and exceptional customer service. We have been shaping the real estate landscape in Ranchi for more than two decades, and the partners of the firm independently have a background of over 40 years in the real estate industry.
             </p>
-            <p className="text-slate-700 text-base md:text-lg font-medium">
-              We are committed to deliver on time with uncompromised efficacy.
+            <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light">
+              The projects undertaken by us range from low-cost housing to high end bungalows and multi-storeyed apartments in localities like Kanke road, Morabadi, Chiraundi, Ratu road etc.
+            </p>
+            <p className="text-slate-900 text-base md:text-lg font-semibold">
+              We are committed to deliver you in time with uncompromised efficacy.
             </p>
             <div className="pt-2">
               <Link

@@ -81,19 +81,17 @@ export default async function Home() {
       if (settingsMap.milestones.qualityConstruction) qualityConstruction = settingsMap.milestones.qualityConstruction;
     }
 
-    // 2. Ongoing & Upcoming Projects for Landmark Projects
-    activeProjects = allProjects
-      .filter(p => p.status === 'ONGOING' || p.status === 'UPCOMING')
-      .map(p => ({
-        title: p.title,
-        slug: p.slug,
-        location: p.location,
-        configuration: p.configuration,
-        status: p.status as ProjectStatus,
-        imageUrl: p.heroImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
-      }));
+    // 2. All Projects for Landmark Projects section (Ongoing, Upcoming, and Completed)
+    activeProjects = allProjects.map(p => ({
+      title: p.title,
+      slug: p.slug,
+      location: p.location,
+      configuration: p.configuration,
+      status: p.status as ProjectStatus,
+      imageUrl: p.heroImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
+    }));
 
-    // 3. Completed Projects for Delivered Projects section
+    // 3. Completed Projects for Delivered Projects section down below
     completedProjects = allProjects
       .filter(p => p.status === 'COMPLETED')
       .map(p => ({
@@ -150,9 +148,22 @@ export default async function Home() {
 
   if (completedProjects.length === 0) {
     completedProjects = [
-      { title: "Kriti Residency", slug: "kriti-residency", location: "Harmu, Ranchi", year: "2024", img: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop" },
-      { title: "Kriti Enclave", slug: "kriti-enclave", location: "Lalpur, Ranchi", year: "2022", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop" },
-      { title: "Kriti Gardens", slug: "kriti-gardens", location: "Namkum, Ranchi", year: "2021", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200&auto=format&fit=crop" }
+      {
+        title: "Dayal Apartment",
+        slug: "dayal-apartment",
+        location: "Bariatu, Ranchi",
+        configuration: "3 BHK Flats",
+        status: "COMPLETED" as ProjectStatus,
+        imageUrl: "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/1790196597978-whatsapp-image-2026-09-22-at-5.10.21-pm.avif"
+      },
+      {
+        title: "Shiv Shakti Apartment",
+        slug: "shiv-shakti-apartment",
+        location: "Morabadi, Ranchi",
+        configuration: "2 & 3 BHK Apartments",
+        status: "COMPLETED" as ProjectStatus,
+        imageUrl: "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/1790196617030-whatsapp-image-2026-09-22-at-5.09.49-pm.avif"
+      }
     ];
   }
 
@@ -220,53 +231,13 @@ export default async function Home() {
 
           <ScrollReveal delay={150} direction="up">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-              {activeProjects.map((project, i) => (
+              {activeProjects.slice(0, 3).map((project, i) => (
                 <ProjectCard key={i} {...project} />
               ))}
             </div>
           </ScrollReveal>
         </div>
       </section>
-
-      {/* Delivered Projects Section - Completed residences */}
-      {completedProjects.length > 0 && (
-        <section className="py-12 sm:py-16 md:py-20 bg-slate-50 border-t border-slate-100 relative">
-          <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
-            <ScrollReveal direction="up">
-              <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-6 border-b border-slate-200 pb-5">
-                <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-800 text-xs font-bold tracking-[0.2em] uppercase mb-2.5 border border-emerald-200/50">
-                    <span>✦</span>
-                    <span>Delivered Landmarks</span>
-                  </div>
-                  <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-slate-950 font-bold tracking-tight">
-                    Delivered Projects
-                  </h2>
-                  <p className="text-base md:text-lg text-slate-500 font-light mt-1.5 max-w-xl">
-                    Successfully completed and handed-over residences across Ranchi.
-                  </p>
-                </div>
-                <Link 
-                  href="/projects?filter=completed" 
-                  prefetch={true}
-                  className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-900 hover:text-[#c69c6d] transition-colors py-2 px-4 rounded-full border border-slate-200 hover:border-[#c69c6d]/50 bg-white shadow-2xs"
-                >
-                  <span>View All Delivered</span>
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 text-[#c69c6d]" />
-                </Link>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={150} direction="up">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-                {completedProjects.map((project, i) => (
-                  <ProjectCard key={i} {...project} />
-                ))}
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-      )}
 
       {/* About Kriti Developers - Editorial Heritage Section */}
       <section className="py-12 sm:py-16 md:py-20 bg-[#fafbfc] border-t border-slate-100 relative overflow-hidden">
@@ -284,7 +255,7 @@ export default async function Home() {
                 </h2>
 
                 <p className="text-slate-600 text-base md:text-lg mb-6 leading-relaxed font-light">
-                  At Kriti Developers, we believe homes are more than physical structures—they are sanctuaries where generations thrive. With four decades of dedicated craftsmanship in Ranchi, Jharkhand, our philosophy is anchored in structural integrity, timeless aesthetics, and uncompromising transparency.
+                  Kriti Developers is an experienced construction firm in Ranchi, built on a foundation of trust and commitment to exceed customer expectations. Focusing on residential, commercial, and land development, our partners independently bring over 40 years of industry background to deliver residences on time with uncompromised efficacy.
                 </p>
 
                 {/* Value Pillars List */}
@@ -341,11 +312,11 @@ export default async function Home() {
                   <div className="absolute bottom-6 left-6 right-6 backdrop-blur-md bg-slate-950/80 p-5 rounded-2xl border border-white/10 text-white shadow-xl flex items-center justify-between">
                     <div>
                       <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#dfba8e]">Proven Track Record</p>
-                      <p className="font-serif text-xl font-bold mt-0.5">35+ Years of Trust</p>
+                      <p className="font-serif text-xl font-bold mt-0.5">40+ Years of Trust</p>
                       <p className="text-xs text-slate-300 font-light">Built on commitment and efficacy</p>
                     </div>
                     <div className="w-12 h-12 rounded-full bg-gold-gradient flex items-center justify-center text-slate-950 font-bold text-sm shrink-0 shadow">
-                      35+ Yrs
+                      40+ Yrs
                     </div>
                   </div>
                 </div>
@@ -525,76 +496,45 @@ export default async function Home() {
         </ScrollReveal>
       </section>
 
-      {/* Completed Projects Showcase */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
-        <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
-          <ScrollReveal direction="up">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-6 border-b border-slate-100 pb-5">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-[#c69c6d] text-xs font-bold tracking-[0.2em] uppercase mb-2.5">
-                  <span>✦</span>
-                  <span>Track Record</span>
+      {/* Delivered Projects Section - Completed residences */}
+      {completedProjects.length > 0 && (
+        <section className="py-12 sm:py-16 md:py-20 bg-slate-50 border-t border-slate-100 relative">
+          <div className="container max-w-[1536px] mx-auto px-6 lg:px-12">
+            <ScrollReveal direction="up">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-6 border-b border-slate-200 pb-5">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-800 text-xs font-bold tracking-[0.2em] uppercase mb-2.5 border border-emerald-200/50">
+                    <span>✦</span>
+                    <span>Delivered Landmarks</span>
+                  </div>
+                  <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-slate-950 font-bold tracking-tight">
+                    Delivered Projects
+                  </h2>
+                  <p className="text-base md:text-lg text-slate-500 font-light mt-1.5 max-w-xl">
+                    Successfully completed and handed-over residences across Ranchi.
+                  </p>
                 </div>
-                <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-slate-950 font-bold tracking-tight">
-                  Delivered Communities
-                </h2>
-                <p className="text-slate-500 text-base md:text-lg font-light mt-1.5">
-                  Landmarks handed over with pride and inhabited by joyful residents.
-                </p>
-              </div>
-              <Link 
-                href="/projects?filter=completed" 
-                prefetch={true} 
-                className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-900 hover:text-[#c69c6d] transition-colors py-2 px-4 rounded-full border border-slate-200 hover:border-[#c69c6d]/50"
-              >
-                <span>View All Delivered</span>
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 text-[#c69c6d]" />
-              </Link>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={150} direction="up">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {completedProjects.map((project, i) => (
                 <Link 
-                  key={i} 
-                  href={`/projects/${project.slug}`} 
-                  prefetch={true} 
-                  className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200/80 hover:border-[#c69c6d]/50 hover:shadow-xl transition-all duration-500"
+                  href="/projects?filter=completed" 
+                  prefetch={true}
+                  className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-900 hover:text-[#c69c6d] transition-colors py-2 px-4 rounded-full border border-slate-200 hover:border-[#c69c6d]/50 bg-white shadow-2xs"
                 >
-                  <div className="relative h-64 overflow-hidden bg-slate-900">
-                    <Image
-                      src={project.img}
-                      alt={project.title}
-                      fill
-                      loading="lazy"
-                      className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-                    />
-                    <div className="absolute top-4 right-4">
-                      <span className="backdrop-blur-md bg-slate-950/80 text-[#dfba8e] border border-amber-400/30 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
-                        Delivered {project.year}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-7">
-                    <h3 className="font-serif text-2xl font-bold text-slate-900 group-hover:text-[#c69c6d] transition-colors duration-300 mb-2">
-                      {project.title}
-                    </h3>
-                    <div className="flex items-center text-slate-500 text-xs mb-4">
-                      <MapPin className="h-3.5 w-3.5 mr-1.5 text-[#c69c6d]" />
-                      {project.location}
-                    </div>
-                    <div className="flex items-center text-[#c69c6d] text-xs font-semibold gap-1.5">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      <span>100% Handover Complete</span>
-                    </div>
-                  </div>
+                  <span>View All Projects</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 text-[#c69c6d]" />
                 </Link>
-              ))}
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={150} direction="up">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                {completedProjects.slice(0, 3).map((project, i) => (
+                  <ProjectCard key={i} {...project} />
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
 
       {/* Find Your Next Address Banner CTA with Architectural Twilight Render */}
       <section className="bg-[#050b14] text-white border-t border-amber-500/20 overflow-hidden">
