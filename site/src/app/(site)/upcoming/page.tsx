@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, MapPin, Building2, Bell } from "lucide-react";
 import pool from "@/lib/db";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
   title: "Upcoming Projects | Kriti Developers",

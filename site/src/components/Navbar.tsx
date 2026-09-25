@@ -53,25 +53,15 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
-          {/* Quick Phone Call on desktop */}
+        <div className="flex items-center gap-3">
+          {/* Quick Phone Call */}
           <a
-            href="tel:+919876543210"
-            className="hidden lg:flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-600 hover:text-[#c69c6d] transition-colors py-2 px-3 rounded-full hover:bg-slate-50 border border-transparent hover:border-slate-200"
+            href="tel:+919570822345"
+            className="flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-700 hover:text-[#c69c6d] transition-colors py-1.5 sm:py-2 px-3 sm:px-4 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200"
           >
             <Phone className="w-3.5 h-3.5 text-[#c69c6d]" />
-            <span>+91 98765 43210</span>
+            <span>+91 95708 22345</span>
           </a>
-
-          <Link
-            href="/enquiry"
-            prefetch={true}
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="bg-gold-gradient hover:brightness-105 active:scale-95 text-slate-950 font-bold px-3 py-1.5 md:px-6 md:py-2.5 rounded-full text-[11px] md:text-xs uppercase tracking-wider transition-all duration-300 gold-glow text-center whitespace-nowrap border border-amber-300/40"
-          >
-            <span className="sm:hidden">Enquire</span>
-            <span className="hidden sm:inline">Enquire Now</span>
-          </Link>
         </div>
       </div>
 

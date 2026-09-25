@@ -38,7 +38,7 @@ const DEFAULT_SETTINGS = {
   },
   contact: {
     officeAddress: "Kriti Developers, Circular Road, Lalpur, Ranchi, Jharkhand - 834001",
-    phone: "+91 98765 43210",
+    phone: "+91 95708 22345",
     email: "info@kritidevelopers.in",
     workingHoursMonSat: "Mon - Sat: 9:00 AM - 7:00 PM",
     workingHoursSun: "Sun: 10:00 AM - 4:00 PM",

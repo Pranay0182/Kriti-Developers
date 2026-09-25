@@ -116,8 +116,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-bold text-slate-900 uppercase text-xs tracking-wider">Phone</p>
-                      <a href="tel:+919876543210" className="text-slate-700 hover:text-[#c69c6d] mt-1 block font-medium">
-                        +91 98765 43210
+                      <a href="tel:+919570822345" className="text-slate-700 hover:text-[#c69c6d] mt-1 block font-medium">
+                        +91 95708 22345
                       </a>
                     </div>
                   </div>
@@ -216,7 +216,7 @@ export default function ContactPage() {
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 95708 22345"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
                     />
                   </div>

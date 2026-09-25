@@ -6,7 +6,8 @@ import { HeroSlider } from "@/components/HeroSlider";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import pool from "@/lib/db";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Home() {
   let activeProjects: any[] = [];
@@ -182,6 +183,8 @@ export default async function Home() {
         images={heroImages}
         title={heroTitle}
         subtitle={heroSubtitle}
+        exploreBtnText={settingsMap.hero?.exploreBtnText}
+        contactBtnText={settingsMap.hero?.contactBtnText}
       />
 
       {/* Active Projects Showcase */}
@@ -195,10 +198,10 @@ export default async function Home() {
                   <span>Curated Developments</span>
                 </div>
                 <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-slate-950 font-bold tracking-tight">
-                  Active Landmark Projects
+                  Landmark Projects
                 </h2>
                 <p className="text-base md:text-lg text-slate-500 font-light mt-1.5 max-w-xl">
-                  Thoughtfully planned residential enclaves currently taking shape across Ranchi.
+                  Thoughtfully designed residential homes across Ranchi.
                 </p>
               </div>
               <Link 

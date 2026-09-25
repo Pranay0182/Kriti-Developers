@@ -121,12 +121,12 @@ export function HeroSlider({
             <span className="text-slate-600 hidden sm:inline">•</span>
             <div className="flex items-center gap-2">
               <Building2 className="h-4 w-4 text-[#c69c6d]" />
-              <span>500+ Luxury Homes Delivered</span>
+              <span>Quality Construction</span>
             </div>
             <span className="text-slate-600 hidden sm:inline">•</span>
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-[#c69c6d]" />
-              <span>Prime Ranchi Localities</span>
+              <span>Prime Ranchi Locality</span>
             </div>
           </div>
         </div>
@@ -174,8 +174,8 @@ export function HeroSlider({
           {/* Location & Trust Coordinates - Single compact line */}
           <div className="flex items-center text-[10px] sm:text-xs font-medium text-slate-300 whitespace-nowrap">
             <MapPin size={12} className="text-[#c69c6d] mr-1 shrink-0" />
-            <span className="sm:hidden">Ranchi, JH</span>
-            <span className="hidden sm:inline">Morabadi • Bariatu • Kanke Road</span>
+            <span className="sm:hidden">Tilla Chowk, Ratu Road</span>
+            <span className="hidden sm:inline">Tilla Chowk, Ratu Road</span>
           </div>
         </div>
       </div>

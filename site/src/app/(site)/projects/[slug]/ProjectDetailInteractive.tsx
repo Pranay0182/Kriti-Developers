@@ -172,7 +172,7 @@ export function ProjectDetailInteractive({ project }: ProjectDetailInteractivePr
                       required
                       value={formPhone}
                       onChange={(e) => setFormPhone(e.target.value)}
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 95708 22345"
                       className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
                     />
                   </div>
@@ -627,10 +627,10 @@ export function ProjectDetailInteractive({ project }: ProjectDetailInteractivePr
                 <p className="font-semibold text-sm">Need immediate assistance?</p>
                 <p className="text-xs text-slate-300">Speak directly with our property specialist</p>
                 <a
-                  href="tel:+919876543210"
+                  href="tel:+919570822345"
                   className="inline-block text-sm font-bold text-[#c69c6d] hover:text-white transition"
                 >
-                  +91 98765 43210
+                  +91 95708 22345
                 </a>
               </div>
             </div>

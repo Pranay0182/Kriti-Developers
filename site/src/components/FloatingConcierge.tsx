@@ -15,12 +15,12 @@ export function FloatingConcierge() {
           <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-bold tracking-[0.16em] uppercase text-[#dfba8e]">VIP Concierge</span>
+              <span className="text-xs font-bold tracking-[0.16em] uppercase text-[#dfba8e]">Contact Us</span>
             </div>
             <button
               onClick={() => setIsOpen(false)}
               className="text-slate-400 hover:text-white p-1 transition-colors"
-              aria-label="Close concierge"
+              aria-label="Close contact window"
             >
               <X size={16} />
             </button>
@@ -32,7 +32,7 @@ export function FloatingConcierge() {
 
           <div className="space-y-2.5">
             <a
-              href="https://wa.me/919876543210?text=Hello%20Kriti%20Developers,%20I%20would%20like%20to%20know%20more%20about%20your%20luxury%20residences."
+              href="https://wa.me/919570822345?text=Hello%20Kriti%20Developers,%20I%20would%20like%20to%20know%20more%20about%20your%20luxury%20residences."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 hover:bg-emerald-500/20 border border-white/5 hover:border-emerald-500/30 transition-all text-xs font-semibold group"
@@ -47,7 +47,7 @@ export function FloatingConcierge() {
             </a>
 
             <a
-              href="tel:+919876543210"
+              href="tel:+919570822345"
               className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 hover:bg-amber-500/20 border border-white/5 hover:border-amber-500/30 transition-all text-xs font-semibold group"
             >
               <div className="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-[#dfba8e] group-hover:scale-110 transition-transform">
@@ -55,7 +55,7 @@ export function FloatingConcierge() {
               </div>
               <div className="flex-1">
                 <div className="text-white">Direct Phone Call</div>
-                <div className="text-[10px] text-slate-400 font-normal">+91 98765 43210</div>
+                <div className="text-[10px] text-slate-400 font-normal">+91 95708 22345</div>
               </div>
             </a>
 
@@ -81,11 +81,11 @@ export function FloatingConcierge() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="group relative flex items-center gap-1.5 sm:gap-2.5 bg-[#050b14] hover:bg-[#070e1c] text-white border border-[#c69c6d]/60 p-2 sm:px-4 sm:py-2.5 rounded-full shadow-[0_8px_25px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer focus:outline-hidden"
-        aria-label="Open luxury concierge"
+        aria-label="Contact Us"
       >
         <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
         <span className="text-xs uppercase font-bold tracking-[0.16em] text-[#dfba8e] hidden sm:inline">
-          VIP Consultation
+          Contact Us
         </span>
         <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gold-gradient flex items-center justify-center text-slate-950 shrink-0 shadow-sm">
           <Sparkles size={11} className="sm:hidden" />

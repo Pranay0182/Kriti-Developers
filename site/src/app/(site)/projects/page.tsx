@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ProjectCard, ProjectStatus } from "@/components/ProjectCard";
 import pool from "@/lib/db";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function ProjectsPage({
   searchParams,

@@ -23,7 +23,7 @@ export function Footer() {
             </p>
             <div className="text-xs text-slate-400 pt-2 space-y-1.5 font-light">
               <p className="text-slate-300">Circular Road, Lalpur, Ranchi, Jharkhand - 834001</p>
-              <p>Direct Desk: <a href="tel:+919876543210" className="text-[#dfba8e] hover:underline font-semibold">+91 98765 43210</a></p>
+              <p>Direct Desk: <a href="tel:+919570822345" className="text-[#dfba8e] hover:underline font-semibold">+91 95708 22345</a></p>
               <p>Email: <a href="mailto:info@kritidevelopers.in" className="text-slate-300 hover:text-[#c69c6d] transition-colors">info@kritidevelopers.in</a></p>
             </div>
           </div>

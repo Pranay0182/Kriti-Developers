@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
       id: "changes",
       title: "Changes & Contact Information",
       content:
-        "We may update this Privacy Policy periodically. If you have questions regarding your data privacy, please reach us at info@kritidevelopers.in or call +91 98765 43210.",
+        "We may update this Privacy Policy periodically. If you have questions regarding your data privacy, please reach us at info@kritidevelopers.in or call +91 95708 22345.",
     },
   ];
 

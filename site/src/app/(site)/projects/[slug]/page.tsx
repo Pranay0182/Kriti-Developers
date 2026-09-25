@@ -5,9 +5,8 @@ import { MapPin, Calendar, Building2, Download, Play, CheckCircle2, Waves, Dumbb
 import pool from "@/lib/db";
 import { ProjectDetailInteractive } from "./ProjectDetailInteractive";
 
-export const revalidate = 60;
-
-const projectDetailCache = new Map<string, { data: any; expiry: number }>();
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateStaticParams() {
   try {
@@ -32,13 +31,6 @@ export default async function ProjectDetailsPage({
 }) {
   const { slug } = await params;
 
-  // 1. Instant cache check
-  const now = Date.now();
-  const cached = projectDetailCache.get(slug);
-  if (cached && cached.expiry > now) {
-    return <ProjectDetailInteractive project={cached.data} />;
-  }
-
   let project: any = null;
 
   try {
@@ -59,8 +51,6 @@ export default async function ProjectDetailsPage({
       project.floorPlans = floorPlans.rows;
       project.specifications = specs.rows;
       project.images = images.rows.map(i => i.url);
-
-      projectDetailCache.set(slug, { data: project, expiry: now + 300000 });
     }
   } catch (err) {
     console.error("DB fetch error in project detail:", err);
