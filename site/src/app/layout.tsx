@@ -15,6 +15,14 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Kriti Developers | Premium Real Estate",
   description: "Creating spaces that stand the test of time. Thoughtfully planned developments for modern living.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+      { url: "/k.png", type: "image/png", sizes: "256x256" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 import { Navbar } from "@/components/Navbar";

@@ -5,7 +5,16 @@ import { AdminSidebar } from "@/components/AdminSidebar";
 export const metadata: Metadata = {
   title: "Kriti Developers - Admin Panel",
   description: "Enterprise management panel for Kriti Developers properties, enquiries, and media.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
+
+import { AdminLayoutShell } from "@/components/AdminLayoutShell";
 
 export default function RootLayout({
   children,
@@ -15,12 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-slate-50 text-slate-900 min-h-screen">
-        <div className="flex min-h-screen">
-          <AdminSidebar />
-          <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-            {children}
-          </div>
-        </div>
+        <AdminLayoutShell>{children}</AdminLayoutShell>
       </body>
     </html>
   );

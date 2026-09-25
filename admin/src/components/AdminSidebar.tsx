@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { LayoutDashboard, Building2, MessageSquareText, Image as ImageIcon, Settings, ExternalLink, ShieldCheck } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { LayoutDashboard, Building2, MessageSquareText, Image as ImageIcon, Settings, ExternalLink, ShieldCheck, LogOut } from "lucide-react";
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const navItems = [
     { label: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -14,6 +15,16 @@ export function AdminSidebar() {
     { label: "Media Gallery", href: "/gallery", icon: ImageIcon },
     { label: "Site Settings", href: "/settings", icon: Settings },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/login");
+      router.refresh();
+    } catch {
+      router.push("/login");
+    }
+  };
 
   return (
     <aside className="w-64 bg-[#0b1528] text-white flex flex-col min-h-screen border-r border-slate-800">
@@ -63,7 +74,7 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      {/* Footer / System Status */}
+      {/* Footer / System Status & Logout */}
       <div className="p-4 border-t border-slate-800/80 space-y-3">
         <a
           href="http://localhost:3000"
@@ -80,8 +91,17 @@ export function AdminSidebar() {
 
         <div className="flex items-center gap-2 px-3 py-2 text-[11px] text-slate-400 bg-slate-900/40 rounded">
           <ShieldCheck className="w-4 h-4 text-[#c69c6d]" />
-          <span>Cloudflare R2 & Supabase Connected</span>
+          <span>Cloudflare R2 & Supabase</span>
         </div>
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-rose-300 hover:text-white bg-rose-950/40 hover:bg-rose-900/60 rounded border border-rose-800/30 transition cursor-pointer"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+          <span>Sign Out</span>
+        </button>
       </div>
     </aside>
   );
