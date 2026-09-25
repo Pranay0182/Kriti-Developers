@@ -76,10 +76,8 @@ export default async function Home() {
       if (settingsMap.milestones.sqftDeveloped) sqftDeveloped = settingsMap.milestones.sqftDeveloped;
     }
 
-    // 2. Active Projects
+    // 2. Landmark Projects (show all projects from admin, ongoing, upcoming, and completed)
     activeProjects = allProjects
-      .filter(p => p.status === 'ONGOING' || p.status === 'UPCOMING')
-      .slice(0, 3)
       .map(p => ({
         title: p.title,
         slug: p.slug,

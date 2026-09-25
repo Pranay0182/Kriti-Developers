@@ -76,7 +76,7 @@ export function ProjectCard({
         </div>
 
         <Link
-          href={`/projects/${slug}`}
+          href={`/projects/${encodeURIComponent(slug)}`}
           prefetch={true}
           className="group/btn w-full border border-[#c69c6d]/70 text-slate-900 hover:text-slate-950 hover:bg-gold-gradient font-bold uppercase tracking-[0.15em] text-xs py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-2xs hover:shadow-md hover:border-amber-300/40"
         >

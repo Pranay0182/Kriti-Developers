@@ -34,7 +34,19 @@ export default async function ProjectDetailsPage({
   let project: any = null;
 
   try {
-    const projRes = await pool.query('SELECT * FROM "project" WHERE slug = $1', [slug]);
+    const decodedSlug = decodeURIComponent(slug);
+    const hyphenSlug = decodedSlug.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+
+    const projRes = await pool.query(
+      `SELECT * FROM "project" 
+       WHERE slug = $1 
+          OR slug = $2 
+          OR LOWER(slug) = LOWER($2) 
+          OR LOWER(REPLACE(slug, ' ', '-')) = $3
+          OR LOWER(title) = LOWER($2)
+       LIMIT 1`,
+      [slug, decodedSlug, hyphenSlug]
+    );
     if (projRes.rows.length > 0) {
       project = projRes.rows[0];
 
