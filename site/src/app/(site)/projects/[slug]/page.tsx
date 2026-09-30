@@ -5,8 +5,7 @@ import { MapPin, Calendar, Building2, Download, Play, CheckCircle2, Waves, Dumbb
 import pool from "@/lib/db";
 import { ProjectDetailInteractive } from "./ProjectDetailInteractive";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   try {

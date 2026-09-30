@@ -4,141 +4,122 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { X, Volume2, VolumeX, Maximize2, Minimize2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-const VIDEO_SRC = "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/video-popup-1790265204903.mp4";
+const VIDEO_SRC = "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/video-popup-faststart-1790265204903.mp4";
 
 export function FloatingVideoPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
-  const [isMuted, setIsMuted] = useState(false); // Audio by default!
+  const [isMuted, setIsMuted] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const unlockListenersAttached = useRef(false);
+  const playPromiseRef = useRef<Promise<void> | null>(null);
 
-  // Unlocks audio on any user gesture across the document
-  const attachGlobalAudioUnlock = useCallback(() => {
-    if (unlockListenersAttached.current) return;
-    unlockListenersAttached.current = true;
-
-    const unlock = () => {
-      const video = videoRef.current;
-      if (video) {
-        video.muted = false;
-        video.volume = 1.0;
-        setIsMuted(false);
-        if (video.paused) {
-          video.play().catch(() => {});
-        }
-      }
-      cleanup();
-    };
-
-    const cleanup = () => {
-      ["pointerdown", "touchstart", "touchend", "mousedown", "click", "keydown", "wheel"].forEach((evt) => {
-        window.removeEventListener(evt, unlock);
-      });
-      unlockListenersAttached.current = false;
-    };
-
-    ["pointerdown", "touchstart", "touchend", "mousedown", "click", "keydown", "wheel"].forEach((evt) => {
-      window.addEventListener(evt, unlock, { passive: true, once: true });
-    });
-  }, []);
-
-  // Playback function: starts video and attempts audio
-  const startPlayback = useCallback(() => {
+  // Playback function with promise safety to avoid browser abort errors
+  const safePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Try unmuted playback first (audio ON by default)
-    video.muted = false;
-    video.volume = 1.0;
-
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          setIsMuted(false);
-          setIsPlaying(true);
-        })
-        .catch(() => {
-          // If browser autoplay policy blocks unmuted audio on scroll:
-          // Immediately play muted so the video moves smoothly without delay
-          video.muted = true;
-          video
-            .play()
-            .then(() => {
-              setIsPlaying(true);
+    if (video.paused) {
+      const promise = video.play();
+      if (promise !== undefined) {
+        playPromiseRef.current = promise;
+        promise
+          .then(() => {
+            playPromiseRef.current = null;
+            setIsPlaying(true);
+          })
+          .catch((err) => {
+            playPromiseRef.current = null;
+            if (err.name !== "AbortError") {
+              video.muted = true;
               setIsMuted(true);
-              // Attach gesture listener to instantly unmute on first tap / click
-              attachGlobalAudioUnlock();
-            })
-            .catch(() => {});
-        });
+              video.play().then(() => setIsPlaying(true)).catch(() => {});
+            }
+          });
+      }
     }
-  }, [attachGlobalAudioUnlock]);
+  }, []);
 
-  // Scroll detection: appears and plays when scrolled down; hides and pauses at top
+  const safePause = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (playPromiseRef.current) {
+      playPromiseRef.current
+        .then(() => {
+          video.pause();
+          setIsPlaying(false);
+        })
+        .catch(() => {});
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  }, []);
+
+  // Throttled scroll listener via requestAnimationFrame
   useEffect(() => {
     if (isDismissed) return;
 
+    let ticking = false;
+
     const checkScroll = () => {
       const scrollPos = window.scrollY || document.documentElement.scrollTop || 0;
-
-      // When scrolled down past 120px: show popup & start playback
       if (scrollPos > 120) {
-        setIsVisible(true);
-        const video = videoRef.current;
-        if (video && video.paused) {
-          startPlayback();
-        }
+        setIsVisible((prev) => {
+          if (!prev) {
+            setTimeout(() => safePlay(), 50);
+          }
+          return true;
+        });
       } else {
-        // At the top hero: hide popup & pause video so no audio plays
-        setIsVisible(false);
-        const video = videoRef.current;
-        if (video && !video.paused) {
-          video.pause();
-          setIsPlaying(false);
-        }
+        setIsVisible((prev) => {
+          if (prev) {
+            safePause();
+          }
+          return false;
+        });
+      }
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(checkScroll);
+        ticking = true;
       }
     };
 
-    // Run check immediately on mount (in case page loaded at a scroll offset)
     checkScroll();
 
-    window.addEventListener("scroll", checkScroll, { passive: true });
-    window.addEventListener("wheel", checkScroll, { passive: true });
-    window.addEventListener("touchmove", checkScroll, { passive: true });
-
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", checkScroll);
-      window.removeEventListener("wheel", checkScroll);
-      window.removeEventListener("touchmove", checkScroll);
+      window.removeEventListener("scroll", onScroll);
     };
-  }, [isDismissed, startPlayback]);
+  }, [isDismissed, safePlay, safePause]);
 
   // When popup is dismissed with X button
   const handleDismiss = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDismissed(true);
     setIsVisible(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    }
+    safePause();
   };
 
   // Toggle sound explicitly
   const toggleSound = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (videoRef.current) {
-      const nextMuted = !videoRef.current.muted;
-      videoRef.current.muted = nextMuted;
-      videoRef.current.volume = 1.0;
+    const video = videoRef.current;
+    if (video) {
+      const nextMuted = !video.muted;
+      video.muted = nextMuted;
       setIsMuted(nextMuted);
-      if (videoRef.current.paused) {
-        videoRef.current.play().catch(() => {});
-        setIsPlaying(true);
+      if (nextMuted === false) {
+        video.volume = 1.0;
+      }
+      if (video.paused) {
+        safePlay();
       }
     }
   };
@@ -152,25 +133,22 @@ export function FloatingVideoPopup() {
     const video = videoRef.current;
     if (!video) return;
 
-    // If muted, clicking anywhere on the video immediately unmutes and plays
+    // If muted, clicking anywhere on the video immediately unmutes
     if (video.muted) {
       video.muted = false;
       video.volume = 1.0;
       setIsMuted(false);
       if (video.paused) {
-        video.play().catch(() => {});
-        setIsPlaying(true);
+        safePlay();
       }
       return;
     }
 
     // Otherwise toggle play/pause
     if (video.paused) {
-      video.play().catch(() => {});
-      setIsPlaying(true);
+      safePlay();
     } else {
-      video.pause();
-      setIsPlaying(false);
+      safePause();
     }
   };
 
@@ -255,17 +233,16 @@ export function FloatingVideoPopup() {
           >
             <video
               ref={videoRef}
-              src={VIDEO_SRC}
+              muted={isMuted}
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
               className="w-full h-full object-cover select-none"
             >
               <source src={VIDEO_SRC} type="video/mp4" />
               <source src="/video-popup.mp4" type="video/mp4" />
-              <source src="/manjula%20mp4%202.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 

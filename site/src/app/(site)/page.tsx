@@ -6,8 +6,7 @@ import { HeroSlider } from "@/components/HeroSlider";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import pool from "@/lib/db";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function Home() {
   let activeProjects: any[] = [];
