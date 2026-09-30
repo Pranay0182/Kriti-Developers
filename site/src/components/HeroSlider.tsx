@@ -174,8 +174,8 @@ export function HeroSlider({
           {/* Location & Trust Coordinates - Single compact line */}
           <div className="flex items-center text-[10px] sm:text-xs font-medium text-slate-300 whitespace-nowrap">
             <MapPin size={12} className="text-[#c69c6d] mr-1 shrink-0" />
-            <span className="sm:hidden">Tilla Chowk, Ratu Road</span>
-            <span className="hidden sm:inline">Tilla Chowk, Ratu Road</span>
+            <span className="sm:hidden">Tilta Chowk, Ratu Road</span>
+            <span className="hidden sm:inline">Tilta Chowk, Ratu Road</span>
           </div>
         </div>
       </div>

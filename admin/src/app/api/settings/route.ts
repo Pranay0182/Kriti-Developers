@@ -32,7 +32,7 @@ const DEFAULT_SETTINGS = {
   },
   milestones: {
     yearsExperience: "40+",
-    ranchiExperience: "20+",
+    ranchiExperience: "40+",
     projectsDelivered: "50+",
     qualityConstruction: "100%",
     happyFamilies: "50+",

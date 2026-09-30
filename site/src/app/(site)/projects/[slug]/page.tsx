@@ -13,14 +13,7 @@ export async function generateStaticParams() {
     const res = await pool.query('SELECT slug FROM "project"');
     return res.rows.map((p) => ({ slug: p.slug }));
   } catch {
-    return [
-      { slug: "kriti-heights" },
-      { slug: "kriti-greens" },
-      { slug: "kriti-urban" },
-      { slug: "kriti-enclave" },
-      { slug: "kriti-residency" },
-      { slug: "kriti-gardens" },
-    ];
+    return [];
   }
 }
 
@@ -68,51 +61,8 @@ export default async function ProjectDetailsPage({
     console.error("DB fetch error in project detail:", err);
   }
 
-  // Fallback if not found or DB empty
   if (!project) {
-    if (slug === "kriti-heights" || slug === "kriti-greens" || slug === "kriti-urban") {
-      project = {
-        title: slug === "kriti-heights" ? "Kriti Heights" : slug === "kriti-greens" ? "Kriti Greens" : "Kriti Urban",
-        slug,
-        subtitle: slug === "kriti-heights" ? "Premium Residences in Morabadi, Ranchi" : slug === "kriti-greens" ? "Eco-Luxury Homes in Bariatu, Ranchi" : "Smart Living on Kanke Road, Ranchi",
-        status: "ONGOING",
-        type: "Residential",
-        location: slug === "kriti-heights" ? "Morabadi, Ranchi" : slug === "kriti-greens" ? "Bariatu, Ranchi" : "Kanke Road, Ranchi",
-        configuration: "2 & 3 BHK",
-        possession: "2027",
-        description: "Kriti Heights is a premium residential development designed for modern living in Ranchi. With thoughtfully planned spaces, world-class amenities, and excellent connectivity to Morabadi Ground and Tagore Hill, it offers the perfect blend of comfort and convenience.",
-        heroImage: "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/1790196597978-whatsapp-image-2026-09-22-at-5.10.21-pm.avif",
-        brochureUrl: "#",
-        videoUrl: "#",
-        amenities: ["Swimming Pool", "Clubhouse", "Landscaped Gardens", "24/7 Security", "Gymnasium", "Kids Play Area"],
-        landmarks: [
-          { name: "Birsa Munda Airport (IXR)", distance: "8 km" },
-          { name: "Ranchi Railway Station", distance: "5 km" },
-          { name: "RIMS Hospital, Bariatu", distance: "3 km" },
-          { name: "Morabadi Ground & Stadium", distance: "1.5 km" },
-          { name: "Tagore Hill", distance: "2.5 km" },
-        ],
-        floorPlans: [
-          { name: "2 BHK - Floor Plan", planType: "2 BHK", size: "1200 Sq. Ft.", url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop" },
-          { name: "3 BHK - Floor Plan", planType: "3 BHK", size: "1650 Sq. Ft.", url: "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?q=80&w=1200&auto=format&fit=crop" },
-        ],
-        specifications: [
-          { category: "Structure", details: "RCC framed earthquake resistant structure with high-grade solid block masonry." },
-          { category: "Flooring", details: "Premium vitrified tiles in living, dining, and bedrooms; anti-skid ceramic tiles in bathrooms and balconies." },
-          { category: "Kitchen", details: "Polished granite platform with stainless steel sink and 2 ft dado ceramic tiles above counter." },
-          { category: "Doors & Windows", details: "Teak wood main door with digital smart lock; UPVC sliding windows with bug mesh." },
-          { category: "Electrical", details: "Concealed copper wiring with modular switches (Schneider/Legrand) and MCB protection." },
-        ],
-        images: [
-          "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/1790196597978-whatsapp-image-2026-09-22-at-5.10.21-pm.avif",
-          "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/1790196617030-whatsapp-image-2026-09-22-at-5.09.49-pm.avif",
-          "https://pub-a960e227e6d7427991deaa543564e119.r2.dev/1790196626089-whatsapp-image-2026-09-22-at-5.10.48-pm.avif",
-          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop",
-        ]
-      };
-    } else {
-      notFound();
-    }
+    notFound();
   }
 
   return <ProjectDetailInteractive project={project} />;

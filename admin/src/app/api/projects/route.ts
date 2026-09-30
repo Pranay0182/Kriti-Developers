@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
       landmarks = [],
       floorPlans = [],
       specifications = [],
+      images = [],
     } = body;
 
     const projectId = `proj-${Date.now()}`;
@@ -68,6 +69,14 @@ export async function POST(req: NextRequest) {
     for (const sp of specifications) {
       if (sp.category && sp.details) {
         await pool.query('INSERT INTO "specification" (id, category, details, "projectId") VALUES (gen_random_uuid(), $1, $2, $3)', [sp.category, sp.details, projectId]);
+      }
+    }
+
+    // Insert gallery images
+    for (const img of images) {
+      const url = typeof img === "string" ? img : img?.url;
+      if (url && url.trim()) {
+        await pool.query('INSERT INTO "projectImage" (id, url, "projectId") VALUES (gen_random_uuid(), $1, $2)', [url.trim(), projectId]);
       }
     }
 

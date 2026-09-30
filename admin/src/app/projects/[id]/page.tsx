@@ -16,17 +16,19 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
     }
     project = projRes.rows[0];
 
-    const [amenities, landmarks, floorPlans, specs] = await Promise.all([
+    const [amenities, landmarks, floorPlans, specs, images] = await Promise.all([
       pool.query('SELECT * FROM "amenity" WHERE "projectId" = $1', [id]),
       pool.query('SELECT * FROM "landmark" WHERE "projectId" = $1', [id]),
       pool.query('SELECT * FROM "floorPlan" WHERE "projectId" = $1', [id]),
       pool.query('SELECT * FROM "specification" WHERE "projectId" = $1', [id]),
+      pool.query('SELECT * FROM "projectImage" WHERE "projectId" = $1', [id]),
     ]);
 
     project.amenities = amenities.rows;
     project.landmarks = landmarks.rows;
     project.floorPlans = floorPlans.rows;
     project.specifications = specs.rows;
+    project.images = images.rows;
   } catch (err) {
     console.error(err);
     notFound();

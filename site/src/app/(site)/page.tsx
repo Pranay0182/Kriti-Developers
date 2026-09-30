@@ -29,7 +29,7 @@ export default async function Home() {
   let findYourNextCta = "Enquire Now";
 
   let yearsExperience = "40+";
-  let ranchiExperience = "20+";
+  let ranchiExperience = "40+";
   let projectsDelivered = "50+";
   let qualityConstruction = "100%";
 
@@ -615,7 +615,7 @@ export default async function Home() {
                 { name: "Morabadi", desc: "Tagore Hill & Morabadi Ground Corridor", tag: "Prime Residential" },
                 { name: "Kanke Road", desc: "Urban Arterial Hub & Premium Living", tag: "High Demand Zone" },
                 { name: "Doranda", desc: "Historic Cultural Corridor & South Ranchi Hub", tag: "Established Zone" },
-                { name: "Ratu Road", desc: "Tilla Chowk Corridor & Central Connectivity", tag: "Prime Corridor" },
+                { name: "Ratu Road", desc: "Tilta Chowk Corridor & Central Connectivity", tag: "Prime Corridor" },
                 { name: "Chiraundi", desc: "Serene Residential Landscape & Growth Hub", tag: "Emerging Enclave" }
               ].map((locality, i) => (
                 <div key={i} className="group p-7 rounded-3xl border border-slate-200/80 bg-[#fdfdfd] hover:border-[#c69c6d]/50 hover:shadow-xl transition-all duration-300 flex flex-col justify-between">

@@ -31,6 +31,7 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"general" | "media" | "amenities" | "floorPlans" | "landmarks" | "specs">("general");
+  const [newGalleryUrl, setNewGalleryUrl] = useState("");
 
   const [formData, setFormData] = useState({
     title: initialData?.title || "",
@@ -39,27 +40,22 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
     status: initialData?.status || "ONGOING",
     type: initialData?.type || "Residential",
     location: initialData?.location || "Ranchi",
-    configuration: initialData?.configuration || "2 & 3 BHK",
-    possession: initialData?.possession || "2027",
+    configuration: initialData?.configuration || "",
+    possession: initialData?.possession || "",
     description: initialData?.description || "",
     heroImage: initialData?.heroImage || "",
     brochureUrl: initialData?.brochureUrl || "",
     videoUrl: initialData?.videoUrl || "",
     isFeatured: initialData?.isFeatured || false,
-    amenities: initialData?.amenities?.map((a: any) => typeof a === "string" ? a : a.name) || ["Swimming Pool", "Clubhouse", "Landscaped Gardens", "24/7 Security", "Gymnasium", "Kids Play Area"],
-    landmarks: initialData?.landmarks || [
-      { name: "Birsa Munda Airport (IXR)", distance: "8 km" },
-      { name: "Ranchi Railway Station", distance: "5 km" },
-      { name: "RIMS Hospital, Bariatu", distance: "3 km" },
-    ],
-    floorPlans: initialData?.floorPlans || [
-      { name: "2 BHK - Floor Plan", planType: "2 BHK", size: "1200 Sq. Ft.", url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop" }
-    ],
-    specifications: initialData?.specifications || [
-      { category: "Structure", details: "RCC framed earthquake resistant structure." },
-      { category: "Flooring", details: "Vitrified tiles in living and dining rooms." },
-      { category: "Kitchen", details: "Granite counter top with stainless steel sink." }
-    ]
+    amenities: Array.isArray(initialData?.amenities)
+      ? initialData.amenities.map((a: any) => typeof a === "string" ? a : a.name).filter(Boolean)
+      : [],
+    landmarks: Array.isArray(initialData?.landmarks) ? initialData.landmarks : [],
+    floorPlans: Array.isArray(initialData?.floorPlans) ? initialData.floorPlans : [],
+    specifications: Array.isArray(initialData?.specifications) ? initialData.specifications : [],
+    images: Array.isArray(initialData?.images)
+      ? initialData.images.map((img: any) => typeof img === "string" ? img : img.url).filter(Boolean)
+      : [],
   });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +75,23 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
         amenities: exists ? prev.amenities.filter((a: string) => a !== name) : [...prev.amenities, name]
       };
     });
+  };
+
+  const handleAddGalleryImage = (url: string) => {
+    if (url) {
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, url]
+      }));
+      setNewGalleryUrl("");
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_: any, i: number) => i !== index)
+    }));
   };
 
   const addLandmark = () => {
@@ -359,6 +372,39 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
               helperText="High-resolution exterior render stored securely in Cloudflare R2 bucket 'images'."
             />
 
+            {/* Project Gallery Images */}
+            <div className="pt-4 border-t border-slate-100 space-y-4">
+              <div>
+                <h4 className="text-sm font-bold text-slate-900">Project Gallery Images</h4>
+                <p className="text-xs text-slate-500">Add multiple photos for this specific project. Only photos you add here will appear in its Gallery section.</p>
+              </div>
+
+              {formData.images.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {formData.images.map((url: string, idx: number) => (
+                    <div key={idx} className="relative rounded-lg overflow-hidden border border-slate-200 group h-32 bg-slate-100 shadow-2xs">
+                      <img src={url} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(idx)}
+                        className="absolute top-2 right-2 bg-rose-600 hover:bg-rose-700 text-white p-1.5 rounded-full shadow transition"
+                        title="Remove Image"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <ImageUploader
+                label="Upload & Add Gallery Image"
+                value={newGalleryUrl}
+                onChange={handleAddGalleryImage}
+                helperText="Upload to Cloudflare R2 to add directly into this project's gallery list."
+              />
+            </div>
+
             <div className="pt-4 border-t border-slate-100 space-y-6">
               <BrochureUploader
                 label="Official Project Brochure (PDF)"
@@ -435,63 +481,69 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
           </div>
 
           <div className="space-y-4">
-            {formData.floorPlans.map((plan: any, idx: number) => (
-              <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-700">Floor Plan #{idx + 1}</span>
-                  <button
-                    type="button"
-                    onClick={() => removeFloorPlan(idx)}
-                    className="text-xs text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" /> Remove
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Plan Title</label>
-                    <input
-                      type="text"
-                      value={plan.name}
-                      onChange={(e) => updateFloorPlan(idx, "name", e.target.value)}
-                      placeholder="e.g. 2 BHK - Floor Plan"
-                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Plan Type</label>
-                    <input
-                      type="text"
-                      value={plan.planType}
-                      onChange={(e) => updateFloorPlan(idx, "planType", e.target.value)}
-                      placeholder="2 BHK / 3 BHK / 4 BHK"
-                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Super Built-up Area</label>
-                    <input
-                      type="text"
-                      value={plan.size}
-                      onChange={(e) => updateFloorPlan(idx, "size", e.target.value)}
-                      placeholder="e.g. 1200 Sq. Ft."
-                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
-                    />
-                  </div>
-
-                  <div className="md:col-span-3">
-                    <ImageUploader
-                      label="Floor Plan Schematic Image"
-                      value={plan.url}
-                      onChange={(url) => updateFloorPlan(idx, "url", url)}
-                    />
-                  </div>
-                </div>
+            {formData.floorPlans.length === 0 ? (
+              <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50 text-slate-500 text-xs">
+                No floor plans added yet. Click &ldquo;Add Floor Plan&rdquo; above if this project has layout schematics.
               </div>
-            ))}
+            ) : (
+              formData.floorPlans.map((plan: any, idx: number) => (
+                <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">Floor Plan #{idx + 1}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeFloorPlan(idx)}
+                      className="text-xs text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" /> Remove
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Plan Title</label>
+                      <input
+                        type="text"
+                        value={plan.name}
+                        onChange={(e) => updateFloorPlan(idx, "name", e.target.value)}
+                        placeholder="e.g. 2 BHK - Floor Plan"
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Plan Type</label>
+                      <input
+                        type="text"
+                        value={plan.planType}
+                        onChange={(e) => updateFloorPlan(idx, "planType", e.target.value)}
+                        placeholder="2 BHK / 3 BHK / 4 BHK"
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Super Built-up Area</label>
+                      <input
+                        type="text"
+                        value={plan.size}
+                        onChange={(e) => updateFloorPlan(idx, "size", e.target.value)}
+                        placeholder="e.g. 1200 Sq. Ft."
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
+                      />
+                    </div>
+
+                    <div className="md:col-span-3">
+                      <ImageUploader
+                        label="Floor Plan Schematic Image"
+                        value={plan.url}
+                        onChange={(url) => updateFloorPlan(idx, "url", url)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
@@ -514,31 +566,37 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
           </div>
 
           <div className="space-y-3">
-            {formData.landmarks.map((lm: any, idx: number) => (
-              <div key={idx} className="flex items-center gap-3">
-                <input
-                  type="text"
-                  value={lm.name}
-                  onChange={(e) => updateLandmark(idx, "name", e.target.value)}
-                  placeholder="e.g. Birsa Munda Airport (IXR)"
-                  className="flex-1 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
-                />
-                <input
-                  type="text"
-                  value={lm.distance}
-                  onChange={(e) => updateLandmark(idx, "distance", e.target.value)}
-                  placeholder="e.g. 7 km"
-                  className="w-36 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeLandmark(idx)}
-                  className="p-2 text-slate-400 hover:text-rose-600 transition"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+            {formData.landmarks.length === 0 ? (
+              <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50 text-slate-500 text-xs">
+                No nearby landmarks added yet. Click &ldquo;Add Landmark&rdquo; above to list proximity to transport, hospitals, or schools.
               </div>
-            ))}
+            ) : (
+              formData.landmarks.map((lm: any, idx: number) => (
+                <div key={idx} className="flex items-center gap-3">
+                  <input
+                    type="text"
+                    value={lm.name}
+                    onChange={(e) => updateLandmark(idx, "name", e.target.value)}
+                    placeholder="e.g. Birsa Munda Airport (IXR)"
+                    className="flex-1 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
+                  />
+                  <input
+                    type="text"
+                    value={lm.distance}
+                    onChange={(e) => updateLandmark(idx, "distance", e.target.value)}
+                    placeholder="e.g. 7 km"
+                    className="w-36 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c69c6d]/50"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeLandmark(idx)}
+                    className="p-2 text-slate-400 hover:text-rose-600 transition"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
@@ -561,33 +619,39 @@ export function ProjectForm({ initialData, isEditing = false }: ProjectFormProps
           </div>
 
           <div className="space-y-4">
-            {formData.specifications.map((sp: any, idx: number) => (
-              <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-                <div className="flex items-center justify-between">
-                  <input
-                    type="text"
-                    value={sp.category}
-                    onChange={(e) => updateSpec(idx, "category", e.target.value)}
-                    placeholder="Category e.g. Structure / Flooring / Electrical"
-                    className="w-64 px-3 py-1.5 bg-white border border-slate-200 rounded text-xs font-bold uppercase text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeSpec(idx)}
-                    className="text-xs text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" /> Remove
-                  </button>
-                </div>
-                <textarea
-                  rows={2}
-                  value={sp.details}
-                  onChange={(e) => updateSpec(idx, "details", e.target.value)}
-                  placeholder="Details and brands used..."
-                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
-                />
+            {formData.specifications.length === 0 ? (
+              <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50 text-slate-500 text-xs">
+                No specifications added yet. Click &ldquo;Add Specification&rdquo; above to detail structure, tiles, electrical, or plumbing.
               </div>
-            ))}
+            ) : (
+              formData.specifications.map((sp: any, idx: number) => (
+                <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="text"
+                      value={sp.category}
+                      onChange={(e) => updateSpec(idx, "category", e.target.value)}
+                      placeholder="Category e.g. Structure / Flooring / Electrical"
+                      className="w-64 px-3 py-1.5 bg-white border border-slate-200 rounded text-xs font-bold uppercase text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeSpec(idx)}
+                      className="text-xs text-rose-600 hover:text-rose-700 flex items-center gap-1 font-semibold"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" /> Remove
+                    </button>
+                  </div>
+                  <textarea
+                    rows={2}
+                    value={sp.details}
+                    onChange={(e) => updateSpec(idx, "details", e.target.value)}
+                    placeholder="Details and brands used..."
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-[#c69c6d]"
+                  />
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}

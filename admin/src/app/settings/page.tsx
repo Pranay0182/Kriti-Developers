@@ -39,7 +39,7 @@ export default function AdminSettingsPage() {
     },
     milestones: {
       yearsExperience: "40+",
-      ranchiExperience: "20+",
+      ranchiExperience: "40+",
       projectsDelivered: "50+",
       qualityConstruction: "100%",
       happyFamilies: "50+",
@@ -431,7 +431,7 @@ export default function AdminSettingsPage() {
                 <label className="block text-xs font-semibold text-slate-600 mb-1">Years in Ranchi</label>
                 <input
                   type="text"
-                  value={settings.milestones.ranchiExperience || "20+"}
+                  value={settings.milestones.ranchiExperience || "40+"}
                   onChange={(e) =>
                     setSettings({
                       ...settings,

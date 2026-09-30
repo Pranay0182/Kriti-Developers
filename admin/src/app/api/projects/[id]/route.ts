@@ -61,6 +61,7 @@ export async function PUT(
       landmarks = [],
       floorPlans = [],
       specifications = [],
+      images = [],
     } = body;
 
     await pool.query(
@@ -99,6 +100,14 @@ export async function PUT(
     for (const sp of specifications) {
       if (sp.category && sp.details) {
         await pool.query('INSERT INTO "specification" (id, category, details, "projectId") VALUES (gen_random_uuid(), $1, $2, $3)', [sp.category, sp.details, id]);
+      }
+    }
+
+    await pool.query('DELETE FROM "projectImage" WHERE "projectId" = $1', [id]);
+    for (const img of images) {
+      const url = typeof img === "string" ? img : img?.url;
+      if (url && url.trim()) {
+        await pool.query('INSERT INTO "projectImage" (id, url, "projectId") VALUES (gen_random_uuid(), $1, $2)', [url.trim(), id]);
       }
     }
 
