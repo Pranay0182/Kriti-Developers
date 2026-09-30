@@ -3,10 +3,49 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useLenis } from "lenis/react";
 import { Menu, X, Phone } from "lucide-react";
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const lenis = useLenis();
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    setIsMobileMenuOpen(false);
+
+    if (pathname === "/") {
+      e.preventDefault();
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: false, duration: 1.2 });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      router.push("/");
+      setTimeout(() => {
+        if (lenis) {
+          lenis.scrollTo(0, { immediate: true });
+        } else {
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }
+      }, 50);
+    }
+  };
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    setIsMobileMenuOpen(false);
+    if (href === "/" && pathname === "/") {
+      e.preventDefault();
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: false, duration: 1.2 });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
@@ -21,7 +60,11 @@ export function Navbar() {
             {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
           
-          <Link href="/" className="flex items-center group py-0.5 shrink-0" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link 
+            href="/" 
+            className="flex items-center group py-0.5 shrink-0" 
+            onClick={handleLogoClick}
+          >
             <Image
               src="/logo.avif"
               alt="Kriti Developers"
@@ -45,6 +88,7 @@ export function Navbar() {
               key={item.name} 
               href={item.href} 
               prefetch={true} 
+              onClick={(e) => handleNavClick(e, item.href)}
               className="text-xs uppercase tracking-[0.14em] lg:tracking-[0.18em] font-semibold text-slate-700 hover:text-[#c69c6d] transition-all duration-200 relative py-1 group whitespace-nowrap"
             >
               {item.name}
@@ -70,7 +114,7 @@ export function Navbar() {
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-16 md:top-20 left-0 w-full bg-white border-b border-slate-100 shadow-xl flex flex-col py-4 px-6 gap-2 z-50">
-          <Link href="/" prefetch={true} onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-700 hover:text-[#c69c6d] transition-colors py-3 border-b border-slate-50">
+          <Link href="/" prefetch={true} onClick={(e) => handleNavClick(e, "/")} className="text-base font-semibold text-slate-700 hover:text-[#c69c6d] transition-colors py-3 border-b border-slate-50">
             Home
           </Link>
           <Link href="/projects" prefetch={true} onClick={() => setIsMobileMenuOpen(false)} className="text-base font-semibold text-slate-700 hover:text-[#c69c6d] transition-colors py-3 border-b border-slate-50">
